@@ -1,8 +1,9 @@
-import { ArgsType, Field, ID, InputType, ObjectType } from 'type-graphql'
+import { IsEmail } from 'class-validator'
+import { ArgsType, Field, InputType, Int, ObjectType } from 'type-graphql'
 
 import User from './user.model'
-import { PaginatedArgs, PaginatedResponse, withErrorsResponse } from '@src/generic-types'
 import Post from '../Post/post.model'
+import { PaginatedArgs, PaginatedResponse, withErrorsResponse } from '@src/generic-types'
 
 @ArgsType()
 export class GetAllUsersArgs extends PaginatedArgs {}
@@ -25,6 +26,7 @@ export class CreateUsersInput implements Partial<User> {
   name: string
 
   @Field()
+  @IsEmail()
   email: string
 
   @Field()
@@ -39,7 +41,7 @@ export class UpdateUsersResponse extends withErrorsResponse(User) {}
 
 @InputType()
 export class UpdateUsersInput implements Partial<User> {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number
 
   @Field()

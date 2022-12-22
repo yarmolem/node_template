@@ -30,7 +30,7 @@ class Server {
     await this.db.connect()
 
     // Start Apollo
-    await this.apollo.startApolloServer()
+    await this.apollo.start()
 
     // Start Server
     await new Promise((res) => this.app.listen(this.port, () => res(true)))

@@ -1,9 +1,9 @@
+import * as t from './category.types'
+import Category from './category.model'
 import AppDataSource from '@src/data-source'
-import Post from './post.model'
-import { GetAllPostArgs, GetAllPostResponse } from './post.types'
 
-export const PostRepository = AppDataSource.getRepository(Post).extend({
-  async getAllPost({ page, pageSize }: GetAllPostArgs): Promise<GetAllPostResponse> {
+const CategoryRepository = AppDataSource.getRepository(Category).extend({
+  async getAllPost({ page, pageSize }: t.GetAllCategoryArgs): Promise<t.GetAllCategoryResponse> {
     const [data, totalItems] = await this.createQueryBuilder()
       .skip(page === 1 ? 0 : pageSize * (page - 1))
       .take(pageSize)
@@ -17,3 +17,5 @@ export const PostRepository = AppDataSource.getRepository(Post).extend({
     }
   }
 })
+
+export default CategoryRepository

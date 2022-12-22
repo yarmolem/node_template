@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn
 } from 'typeorm'
+
 import Post from '../Post/post.model'
 
 @Entity()

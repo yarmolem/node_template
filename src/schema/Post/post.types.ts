@@ -22,6 +22,9 @@ export class CreatePostInput {
 
   @Field(() => Int)
   userId: number
+
+  @Field(() => Int)
+  categoryId: number
 }
 
 @ObjectType()

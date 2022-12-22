@@ -1,7 +1,6 @@
-import { AppDataSource } from '@src/db'
-import Post from '../Post/post.model'
-
 import User from './user.model'
+import Post from '../Post/post.model'
+import AppDataSource from '@src/data-source'
 import { GetAllUsersArgs, GetAllUsersData, GetAllUsersResponse } from './user.types'
 
 export const UserRepository = AppDataSource.getRepository(User).extend({

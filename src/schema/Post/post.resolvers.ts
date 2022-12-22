@@ -21,8 +21,8 @@ export default class PostResolvers {
 
   @Mutation(() => t.CreatePostResponse, { nullable: true })
   async createPost(@Arg('input') input: t.CreatePostInput): Promise<t.CreatePostResponse> {
-    const data = await this.repository.createQueryBuilder('post').insert().values(input).returning('*').execute()
-    return { data: data.generatedMaps[0] as Post }
+    const data = this.repository.create(input)
+    return { data: await this.repository.save(data) }
   }
 
   @Mutation(() => t.UpdatePostResponse, { nullable: true })

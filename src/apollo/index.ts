@@ -14,18 +14,19 @@ class Apollo {
     this.app = app
   }
 
-  async startApolloServer() {
+  async start() {
     try {
       const schema = await buildSchema({
         validate: false,
         dateScalarMode: 'isoDate',
-        resolvers: [join(__dirname, '../**/*.resolvers.ts')]
+        resolvers: [join(__dirname, '../**/*.resolvers.ts')],
+        emitSchemaFile: join(__dirname, '../../schema.graphql')
       })
 
       this.apollo = new ApolloServer({
         schema,
-        cache: 'bounded',
         csrfPrevention: true,
+        allowBatchedHttpRequests: true,
         context: (ctx: ApolloCtx) => ctx
       })
 
