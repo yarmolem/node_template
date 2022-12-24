@@ -14,12 +14,20 @@ export default class FieldError {
 export class PaginatedArgs {
   @Min(1)
   @Field(() => Int)
-  page: number
+  page: number = 0
 
   @Min(1)
   @Max(50)
   @Field(() => Int)
-  pageSize: number
+  pageSize: number = 10
+
+  get skip(): number {
+    return this.page === 1 ? 0 : this.pageSize * (this.page - 1)
+  }
+
+  get take(): number {
+    return this.pageSize
+  }
 }
 
 export function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {

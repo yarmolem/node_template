@@ -1,20 +1,13 @@
-import { ID, Field, ObjectType } from 'type-graphql'
-import {
-  Column,
-  Entity,
-  OneToMany,
-  JoinColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+import { Field, ID, ObjectType } from 'type-graphql'
+import { Column, Entity, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
 
+import IUser from './user.interface'
 import Post from '../Post/post.model'
-import { UserRoles } from './user.enums'
+import { UserRols } from './user.enums'
 
 @Entity()
 @ObjectType()
-export default class User {
+export default class User implements IUser {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number
@@ -34,19 +27,19 @@ export default class User {
   @Column()
   password: string
 
-  @Field(() => UserRoles)
+  @Field(() => UserRols)
   @Column()
-  rol: UserRoles
-
-  @JoinColumn()
-  @OneToMany(() => Post, (post) => post.user)
-  posts?: Post[]
+  rol: UserRols
 
   @Field()
   @CreateDateColumn()
-  createdAt: Date = new Date()
+  createdAt = new Date()
 
   @Field()
   @UpdateDateColumn()
-  updatedAt: Date = new Date()
+  updatedAt = new Date()
+
+  // Relations
+  @OneToMany(() => Post, (post) => post.user)
+  posts?: Post[]
 }
