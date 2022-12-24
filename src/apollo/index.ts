@@ -5,6 +5,7 @@ import { ApolloServer } from 'apollo-server-express'
 
 import logger from '@src/utils/logger'
 import { ApolloCtx } from '@src/interface'
+import { authChecker } from '@src/utils/auth-checker'
 
 class Apollo {
   apollo: ApolloServer
@@ -17,6 +18,7 @@ class Apollo {
   async start() {
     try {
       const schema = await buildSchema({
+        authChecker,
         validate: false,
         dateScalarMode: 'isoDate',
         resolvers: [join(__dirname, '../**/*.resolvers.ts')],

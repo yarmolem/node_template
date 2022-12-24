@@ -3,31 +3,7 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type Category {
-  id: ID!
-  name: String!
-}
-
-input CreateCategoryInput {
-  name: String!
-}
-
-type CreateCategoryResponse {
-  data: Category
-  errors: [FieldError!]
-}
-
-input CreatePostCategoryInput {
-  name: String!
-}
-
-type CreatePostCategoryResponse {
-  data: PostCategory
-  errors: [FieldError!]
-}
-
 input CreatePostInput {
-  categoryId: Int!
   content: String!
   title: String!
   userId: Int!
@@ -43,6 +19,7 @@ input CreateUsersInput {
   lastname: String!
   name: String!
   password: String!
+  rol: UserRoles!
 }
 
 type CreateUsersResponse {
@@ -60,20 +37,6 @@ type FieldError {
   message: String!
 }
 
-type GetAllCategoryResponse {
-  data: [Category!]!
-  page: Int!
-  pageSize: Int!
-  totalItems: Int!
-}
-
-type GetAllPostCategoryResponse {
-  data: [PostCategory!]!
-  page: Int!
-  pageSize: Int!
-  totalItems: Int!
-}
-
 type GetAllPostResponse {
   data: [Post!]!
   page: Int!
@@ -88,6 +51,7 @@ type GetAllUsersData {
   lastname: String!
   name: String!
   posts: [Post!]!
+  rol: UserRoles!
   updatedAt: DateTime!
 }
 
@@ -99,19 +63,15 @@ type GetAllUsersResponse {
 }
 
 type Mutation {
-  createCategory(input: CreateCategoryInput!): CreateCategoryResponse!
   createPost(input: CreatePostInput!): CreatePostResponse
-  createUser(input: CreateUsersInput!): CreateUsersResponse
-  deleteCategory(id: Int!): Boolean!
+  createUser(input: CreateUsersInput!): CreateUsersResponse!
   deletePost(id: Int!): Boolean!
   deleteUser(id: Float!): Boolean!
-  updateCategory(input: UpdateCategoryInput!): UpdateCategoryResponse!
   updatePost(input: UpdatePostInput!): UpdatePostResponse
-  updateUser(input: UpdateUsersInput!): UpdateUsersResponse
+  updateUser(input: UpdateUsersInput!): UpdateUsersResponse!
 }
 
 type Post {
-  categoryId: Int!
   content: String!
   createdAt: DateTime!
   id: ID!
@@ -120,45 +80,14 @@ type Post {
   userId: Int!
 }
 
-type PostCategory {
-  categoryName: String!
-  id: ID!
-  title: String!
-}
-
 type Query {
-  getAllCategorys(page: Int!, pageSize: Int!): GetAllCategoryResponse!
   getAllPost(page: Int!, pageSize: Int!): GetAllPostResponse!
-  getAllPostCategorys(page: Int!, pageSize: Int!): GetAllPostCategoryResponse!
   getAllUsers(page: Int!, pageSize: Int!): GetAllUsersResponse!
-  getCategoryById(id: Int!): Category
   getPostById(id: Int!): Post
-  getPostCategoryById(id: Int!): PostCategory
   getUserById(id: Int!): User
 }
 
-input UpdateCategoryInput {
-  id: ID!
-  name: String!
-}
-
-type UpdateCategoryResponse {
-  data: Category
-  errors: [FieldError!]
-}
-
-input UpdatePostCategoryInput {
-  id: ID!
-  name: String!
-}
-
-type UpdatePostCategoryResponse {
-  data: PostCategory
-  errors: [FieldError!]
-}
-
 input UpdatePostInput {
-  categoryId: Int!
   content: String!
   id: ID!
   title: String!
@@ -175,7 +104,6 @@ input UpdateUsersInput {
   id: Int!
   lastname: String!
   name: String!
-  password: String!
 }
 
 type UpdateUsersResponse {
@@ -189,5 +117,12 @@ type User {
   id: ID!
   lastname: String!
   name: String!
+  rol: UserRoles!
   updatedAt: DateTime!
+}
+
+enum UserRoles {
+  ADMIN
+  MODERATOR
+  USER
 }

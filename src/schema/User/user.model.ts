@@ -10,6 +10,7 @@ import {
 } from 'typeorm'
 
 import Post from '../Post/post.model'
+import { UserRoles } from './user.enums'
 
 @Entity()
 @ObjectType()
@@ -32,6 +33,10 @@ export default class User {
 
   @Column()
   password: string
+
+  @Field(() => UserRoles)
+  @Column()
+  rol: UserRoles
 
   @JoinColumn()
   @OneToMany(() => Post, (post) => post.user)

@@ -1,7 +1,7 @@
 import { Query, Arg, Mutation, Int, Args, Resolver } from 'type-graphql'
 
+import * as t from './dto'
 import User from './user.model'
-import * as t from './user.types'
 import { setError } from '@src/utils/setError'
 import { UserRepository } from './user.repository'
 
@@ -19,20 +19,21 @@ export default class UserResolvers {
     return this.repository.findOneBy({ id })
   }
 
-  @Mutation(() => t.CreateUsersResponse, { nullable: true })
+  @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
     const user = this.repository.create(input)
     return { data: await this.repository.save(user) }
   }
 
-  @Mutation(() => t.UpdateUsersResponse, { nullable: true })
+  @Mutation(() => t.UpdateUsersResponse)
   async updateUser(@Arg('input') input: t.UpdateUsersInput): Promise<t.UpdateUsersResponse> {
     const { id } = input
     const user = await this.repository.findOneBy({ id })
     if (!user) return setError('id', `No existe usuario con el ${id}`)
 
-    const savedUser = await this.repository.save(input)
-    return { data: { ...savedUser, createdAt: user.createdAt } }
+    await this.repository.save(input)
+
+    return { data: { ...user, ...input } }
   }
 
   @Mutation(() => Boolean)

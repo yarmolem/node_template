@@ -1,6 +1,6 @@
 import AppDataSource from '@src/data-source'
 import Post from './post.model'
-import { GetAllPostArgs, GetAllPostResponse } from './post.types'
+import { GetAllPostArgs, GetAllPostResponse } from './dto'
 
 export const PostRepository = AppDataSource.getRepository(Post).extend({
   async getAllPost({ page, pageSize }: GetAllPostArgs): Promise<GetAllPostResponse> {

@@ -1,9 +1,9 @@
 import { Resolver, Query, Args, Arg, Mutation, Int } from 'type-graphql'
 
+import * as t from './dto'
 import Post from './post.model'
-import * as t from './post.types'
-import { PostRepository } from './post.repository'
 import { setError } from '@src/utils/setError'
+import { PostRepository } from './post.repository'
 
 @Resolver(Post)
 export default class PostResolvers {
