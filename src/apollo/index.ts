@@ -6,10 +6,12 @@ import { ApolloServer } from 'apollo-server-express'
 import logger from '@src/utils/logger'
 import { ApolloCtx } from '@src/interface'
 import { authChecker } from '@src/utils/auth-checker'
+import UserResolvers from '@src/schema/User/user.resolvers'
+import PostResolvers from '@src/schema/Post/post.resolvers'
 
 class Apollo {
+  app: Express
   apollo: ApolloServer
-  private app: Express
 
   constructor(app: Express) {
     this.app = app
@@ -19,16 +21,16 @@ class Apollo {
     try {
       const schema = await buildSchema({
         authChecker,
-        validate: false,
+        validate: true,
         dateScalarMode: 'isoDate',
-        resolvers: [join(__dirname, '../**/*.resolvers.ts')],
+        resolvers: [UserResolvers, PostResolvers],
         emitSchemaFile: join(__dirname, '../../schema.graphql')
       })
 
       this.apollo = new ApolloServer({
         schema,
+        cache: 'bounded',
         csrfPrevention: true,
-        allowBatchedHttpRequests: true,
         context: (ctx: ApolloCtx) => ctx
       })
 

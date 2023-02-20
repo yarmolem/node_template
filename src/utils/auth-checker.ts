@@ -6,7 +6,6 @@ import { UserRepository } from '@src/schema/User/user.repository'
 
 export const authChecker: AuthChecker<ApolloCtx> = async ({ context }, roles) => {
   const token = context.req?.headers?.authorization ?? null
-  console.log({ token })
   if (!token) return false
 
   const payload = verifyJWT(token.replace('Bearer ', ''))
@@ -17,5 +16,5 @@ export const authChecker: AuthChecker<ApolloCtx> = async ({ context }, roles) =>
 
   context.req.user = user
 
-  return roles.includes(user.rol)
+  return roles.length === 0 || roles.includes(user.rol)
 }

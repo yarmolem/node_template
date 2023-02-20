@@ -3,7 +3,7 @@ import { Field, InputType, ObjectType } from 'type-graphql'
 
 import User from '../user.model'
 import IUser from '../user.interface'
-import { UserRols } from '../user.enums'
+import { UserRole } from '../user.enums'
 import { withErrorsResponse } from '@src/generic-types'
 
 type CreateUsers = Omit<IUser, 'id' | 'createdAt' | 'updatedAt'>
@@ -26,6 +26,6 @@ export class CreateUsersInput implements CreateUsers {
   @Field()
   password: string
 
-  @Field(() => UserRols)
-  rol: UserRols
+  @Field(() => UserRole)
+  rol: UserRole
 }

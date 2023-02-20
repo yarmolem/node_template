@@ -1,4 +1,4 @@
-import { UserRols } from './user.enums'
+import { UserRole } from './user.enums'
 
 export default interface IUser {
   id: number
@@ -6,7 +6,7 @@ export default interface IUser {
   name: string
   lastname: string
   password: string
-  rol: UserRols
+  rol: UserRole
   createdAt: Date
   updatedAt: Date
 }

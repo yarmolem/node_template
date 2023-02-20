@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryG
 
 import IUser from './user.interface'
 import Post from '../Post/post.model'
-import { UserRols } from './user.enums'
+import { UserRole } from './user.enums'
 
 @Entity()
 @ObjectType()
@@ -27,17 +27,17 @@ export default class User implements IUser {
   @Column()
   password: string
 
-  @Field(() => UserRols)
-  @Column()
-  rol: UserRols
+  @Field(() => UserRole)
+  @Column({ type: 'enum', enum: UserRole })
+  rol: UserRole
 
   @Field()
   @CreateDateColumn()
-  createdAt = new Date()
+  createdAt: Date = new Date()
 
   @Field()
   @UpdateDateColumn()
-  updatedAt = new Date()
+  updatedAt: Date = new Date()
 
   // Relations
   @OneToMany(() => Post, (post) => post.user)

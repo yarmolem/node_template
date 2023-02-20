@@ -1,7 +1,9 @@
-import path from 'path'
 import { DataSource } from 'typeorm'
 
 import config from './config'
+
+import Post from './schema/Post/post.model'
+import User from './schema/User/user.model'
 
 const AppDataSource = new DataSource({
   port: 5432,
@@ -11,8 +13,8 @@ const AppDataSource = new DataSource({
   synchronize: true,
   username: config.db.user,
   password: config.db.pass,
-  database: 'node_template',
-  entities: [path.resolve(__dirname, './**/*.model.{ts,js}')]
+  database: config.db.name,
+  entities: [User, Post]
 })
 
 export default AppDataSource

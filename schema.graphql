@@ -19,7 +19,7 @@ input CreateUsersInput {
   lastname: String!
   name: String!
   password: String!
-  rol: UserRoles!
+  rol: UserRols!
 }
 
 type CreateUsersResponse {
@@ -51,7 +51,7 @@ type GetAllUsersData {
   lastname: String!
   name: String!
   posts: [Post!]!
-  rol: UserRoles!
+  rol: UserRols!
   updatedAt: DateTime!
 }
 
@@ -81,8 +81,8 @@ type Post {
 }
 
 type Query {
-  getAllPost(page: Int!, pageSize: Int!): GetAllPostResponse!
-  getAllUsers(page: Int!, pageSize: Int!): GetAllUsersResponse!
+  getAllPost(page: Int = 0, pageSize: Int = 10): GetAllPostResponse!
+  getAllUsers(page: Int = 0, pageSize: Int = 10): GetAllUsersResponse!
   getPostById(id: Int!): Post
   getUserById(id: Int!): User
 }
@@ -104,6 +104,7 @@ input UpdateUsersInput {
   id: Int!
   lastname: String!
   name: String!
+  rol: UserRols!
 }
 
 type UpdateUsersResponse {
@@ -117,11 +118,11 @@ type User {
   id: ID!
   lastname: String!
   name: String!
-  rol: UserRoles!
+  rol: UserRols!
   updatedAt: DateTime!
 }
 
-enum UserRoles {
+enum UserRols {
   ADMIN
   MODERATOR
   USER

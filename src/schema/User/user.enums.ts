@@ -1,9 +1,9 @@
 import { registerEnumType } from 'type-graphql'
 
-export enum UserRols {
+export enum UserRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
   MODERATOR = 'MODERATOR'
 }
 
-registerEnumType(UserRols, { name: 'UserRols' })
+registerEnumType(UserRole, { name: 'UserRols' })
