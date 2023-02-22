@@ -1,13 +1,10 @@
-import AppDataSource from '@src/data-source'
+import * as t from './dto'
 import Post from './post.model'
-import { GetAllPostArgs, GetAllPostResponse } from './dto'
+import AppDataSource from '@src/data-source'
 
 export const PostRepository = AppDataSource.getRepository(Post).extend({
-  async getAllPost({ page, pageSize }: GetAllPostArgs): Promise<GetAllPostResponse> {
-    const [data, totalItems] = await this.createQueryBuilder()
-      .skip(page === 1 ? 0 : pageSize * (page - 1))
-      .take(pageSize)
-      .getManyAndCount()
+  async getAllPost({ page, pageSize, skip, take }: t.GetAllPostArgs): Promise<t.GetAllPostResponse> {
+    const [data, totalItems] = await this.createQueryBuilder().skip(skip).take(take).getManyAndCount()
 
     return {
       data,

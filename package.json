@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "node build/index.js",
     "dev": "nodemon build/index.js",
-    "watch": "rimraf build && tsc --watch"
+    "watch": "rimraf build && tsc --watch",
+    "gen:jwt-keys": "ts-node generate_jwt_keys.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -26,6 +27,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^3.11.1",
+    "argon2": "^0.30.3",
     "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -34,6 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
