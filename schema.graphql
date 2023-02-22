@@ -4,13 +4,13 @@
 # -----------------------------------------------
 
 input CreatePostInput {
+  authorId: Int!
   content: String!
   title: String!
-  userId: Int!
 }
 
 type CreatePostResponse {
-  data: Post
+  data: PostModel
   errors: [FieldError!]
 }
 
@@ -19,11 +19,11 @@ input CreateUsersInput {
   lastname: String!
   name: String!
   password: String!
-  rol: UserRols!
+  rol: Role!
 }
 
 type CreateUsersResponse {
-  data: User
+  data: UserModel
   errors: [FieldError!]
 }
 
@@ -37,8 +37,18 @@ type FieldError {
   message: String!
 }
 
+type GetAllPostData {
+  author: UserModel!
+  authorId: Int!
+  content: String!
+  createdAt: DateTime!
+  id: Int!
+  title: String!
+  updatedAt: DateTime!
+}
+
 type GetAllPostResponse {
-  data: [Post!]!
+  data: [GetAllPostData!]!
   page: Int!
   pageSize: Int!
   totalItems: Int!
@@ -51,8 +61,8 @@ type GetAllUsersData {
   id: ID!
   lastname: String!
   name: String!
-  posts: [Post!]!
-  rol: UserRols!
+  posts: [PostModel!]!
+  rol: Role!
   updatedAt: DateTime!
 }
 
@@ -65,7 +75,7 @@ type GetAllUsersResponse {
 
 type LoginUserData {
   token: String!
-  user: User!
+  user: UserModel!
 }
 
 input LoginUserInput {
@@ -84,35 +94,51 @@ type Mutation {
   deletePost(id: Int!): Boolean!
   deleteUser(id: Float!): Boolean!
   loginUser(input: LoginUserInput!): LoginUserResponse!
+  refreshTokenUser: RefreshTokenUserResponse!
   updatePost(input: UpdatePostInput!): UpdatePostResponse
   updateUser(input: UpdateUsersInput!): UpdateUsersResponse!
 }
 
-type Post {
+type PostModel {
+  authorId: Int!
   content: String!
   createdAt: DateTime!
-  id: ID!
+  id: Int!
   title: String!
   updatedAt: DateTime!
-  userId: Int!
 }
 
 type Query {
-  getAllPost(page: Int = 0, pageSize: Int = 10): GetAllPostResponse!
-  getAllUsers(page: Int = 0, pageSize: Int = 10): GetAllUsersResponse!
-  getPostById(id: Int!): Post
-  getUserById(id: Int!): User
+  getAllPost(page: Int = 1, pageSize: Int = 10): GetAllPostResponse!
+  getAllUsers(page: Int = 1, pageSize: Int = 10): GetAllUsersResponse!
+  getPostById(id: Int!): PostModel
+  getUserById(id: Int!): UserModel
+}
+
+type RefreshTokenUserData {
+  token: String!
+  user: UserModel!
+}
+
+type RefreshTokenUserResponse {
+  data: RefreshTokenUserData
+  errors: [FieldError!]
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 input UpdatePostInput {
+  authorId: Int!
   content: String!
-  id: ID!
+  id: Int!
   title: String!
-  userId: Int!
 }
 
 type UpdatePostResponse {
-  data: Post
+  data: PostModel
   errors: [FieldError!]
 }
 
@@ -121,27 +147,21 @@ input UpdateUsersInput {
   id: Int!
   lastname: String!
   name: String!
-  rol: UserRols!
+  rol: Role!
 }
 
 type UpdateUsersResponse {
-  data: User
+  data: UserModel
   errors: [FieldError!]
 }
 
-type User {
+type UserModel {
   createdAt: DateTime!
   email: String!
   fullname: String!
   id: ID!
   lastname: String!
   name: String!
-  rol: UserRols!
+  rol: Role!
   updatedAt: DateTime!
-}
-
-enum UserRols {
-  ADMIN
-  MODERATOR
-  USER
 }

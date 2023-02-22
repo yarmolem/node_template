@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { withErrorsResponse } from '@src/generic-types'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
 import Post from '../post.model'
@@ -6,7 +7,7 @@ import Post from '../post.model'
 export class CreatePostResponse extends withErrorsResponse(Post) {}
 
 @InputType()
-export class CreatePostInput {
+export class CreatePostInput implements Omit<Prisma.PostCreateInput, 'author'> {
   @Field()
   title: string
 
@@ -14,5 +15,5 @@ export class CreatePostInput {
   content: string
 
   @Field(() => Int)
-  userId: number
+  authorId: number
 }

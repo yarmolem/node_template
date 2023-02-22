@@ -1,45 +1,30 @@
-import { Field, ID, ObjectType } from 'type-graphql'
-import { Column, Entity, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Role, User } from '@prisma/client'
+import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
 
-import IUser from './user.interface'
-import Post from '../Post/post.model'
-import { UserRole } from './user.enums'
+registerEnumType(Role, { name: 'Role' })
 
-@Entity()
 @ObjectType()
-export default class User implements IUser {
+export default class UserModel implements User {
   @Field(() => ID)
-  @PrimaryGeneratedColumn()
   id: number
 
   @Field()
-  @Column({ unique: true })
   email: string
 
   @Field()
-  @Column()
   name: string
 
   @Field()
-  @Column()
   lastname: string
 
-  @Column()
   password: string
 
-  @Field(() => UserRole)
-  @Column({ type: 'enum', enum: UserRole })
-  rol: UserRole
+  @Field(() => Role)
+  rol: Role
 
   @Field()
-  @CreateDateColumn()
   createdAt: Date = new Date()
 
   @Field()
-  @UpdateDateColumn()
   updatedAt: Date = new Date()
-
-  // Relations
-  @OneToMany(() => Post, (post) => post.user)
-  posts?: Post[]
 }

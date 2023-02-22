@@ -1,8 +1,8 @@
 import { ArgsType, Field, ObjectType } from 'type-graphql'
-import { PaginatedArgs, PaginatedResponse } from '@src/generic-types'
 
 import User from '../user.model'
 import Post from '@src/schema/Post/post.model'
+import { PaginatedArgs, PaginatedResponse } from '@src/generic-types'
 
 @ArgsType()
 export class GetAllUsersArgs extends PaginatedArgs {}

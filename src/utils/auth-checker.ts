@@ -2,7 +2,7 @@ import { AuthChecker } from 'type-graphql'
 
 import TokenManager from './TokenManager'
 import { ApolloCtx } from '@src/interface'
-import { UserRepository } from '@src/schema/User/user.repository'
+import { prisma } from '@src/data-source'
 
 export const authChecker: AuthChecker<ApolloCtx> = async ({ context }, roles) => {
   const token = context.req?.headers?.authorization ?? null
@@ -11,7 +11,7 @@ export const authChecker: AuthChecker<ApolloCtx> = async ({ context }, roles) =>
   const payload = TokenManager.user.verify(token.replace('Bearer ', ''))
   if (!payload?.id) return false
 
-  const user = await UserRepository.findOneBy({ id: payload.id })
+  const user = await prisma.user.findUnique({ where: { id: payload.id } })
   if (!user) return false
 
   context.req.user = user

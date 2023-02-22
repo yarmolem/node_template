@@ -2,17 +2,14 @@ import { IsEmail } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 import User from '../user.model'
-import IUser from '../user.interface'
-import { UserRole } from '../user.enums'
+import { Prisma, Role } from '@prisma/client'
 import { withErrorsResponse } from '@src/generic-types'
-
-type CreateUsers = Omit<IUser, 'id' | 'createdAt' | 'updatedAt'>
 
 @ObjectType()
 export class CreateUsersResponse extends withErrorsResponse(User) {}
 
 @InputType()
-export class CreateUsersInput implements CreateUsers {
+export class CreateUsersInput implements Prisma.UserCreateInput {
   @Field()
   name: string
 
@@ -26,6 +23,6 @@ export class CreateUsersInput implements CreateUsers {
   @Field()
   password: string
 
-  @Field(() => UserRole)
-  rol: UserRole
+  @Field(() => Role)
+  rol: Role
 }

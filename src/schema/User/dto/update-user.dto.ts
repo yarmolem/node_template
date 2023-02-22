@@ -1,16 +1,15 @@
 import { IsEmail } from 'class-validator'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
 
-import { UserRole } from '../user.enums'
-import User from '../user.model'
+import UserModel from '../user.model'
 import { withErrorsResponse } from '@src/generic-types'
-import IUser from '../user.interface'
+import { Role } from '@prisma/client'
 
 @ObjectType()
-export class UpdateUsersResponse extends withErrorsResponse(User) {}
+export class UpdateUsersResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class UpdateUsersInput implements Partial<IUser> {
+export class UpdateUsersInput implements Partial<UserModel> {
   @Field(() => Int)
   id: number
 
@@ -24,6 +23,6 @@ export class UpdateUsersInput implements Partial<IUser> {
   @Field()
   lastname: string
 
-  @Field(() => UserRole)
-  rol: UserRole
+  @Field(() => Role)
+  rol: Role
 }

@@ -14,7 +14,7 @@ export default class FieldError {
 export class PaginatedArgs {
   @Min(1)
   @Field(() => Int)
-  page: number = 0
+  page: number = 1
 
   @Min(1)
   @Max(50)

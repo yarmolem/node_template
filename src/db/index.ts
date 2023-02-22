@@ -1,16 +1,16 @@
+import { prisma } from '@src/data-source'
 import logger from '@src/utils/logger'
-import AppDataSource from '@src/data-source'
 
 export default class Database {
   events() {
     process
       .on('SIGTERM', () => {
-        AppDataSource.destroy()
+        prisma.$disconnect()
         console.log('\nDisconnected from db')
         process.exit(1)
       })
       .on('SIGINT', () => {
-        AppDataSource.destroy()
+        prisma.$disconnect()
         console.log('\nDisconnected from db')
         process.exit(1)
       })
@@ -20,7 +20,7 @@ export default class Database {
     this.events()
 
     try {
-      await AppDataSource.initialize()
+      await prisma.$connect()
 
       logger.info('Connected to the DB.')
     } catch (error) {

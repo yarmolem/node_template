@@ -1,17 +1,17 @@
-import User from './user.model'
-
 import * as t from './dto'
-import Post from '../Post/post.model'
-import AppDataSource from '@src/data-source'
+import { prisma } from '@src/data-source'
 
-export const UserRepository = AppDataSource.getRepository(User).extend({
-  async getAllUsers({ page, pageSize, skip, take }: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> {
-    const [data, totalItems] = await this.createQueryBuilder('user')
-      .leftJoinAndMapMany('user.posts', Post, 'post', 'post.userId = user.id')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount()
+export const UserRepository = {
+  getAllUsers: async ({ page, pageSize, skip, take }: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> => {
+    const [count, users] = await prisma.$transaction([
+      prisma.user.count(),
+      prisma.user.findMany({
+        skip,
+        take,
+        include: { posts: true }
+      })
+    ])
 
-    return { data: data as t.GetAllUsersData[], page, pageSize, totalItems }
+    return { data: users, page, pageSize, totalItems: count }
   }
-})
+}

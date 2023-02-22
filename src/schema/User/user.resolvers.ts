@@ -3,7 +3,8 @@ import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolv
 
 import * as t from './dto'
 import User from './user.model'
-import { UserRole } from './user.enums'
+import { Role } from '.prisma/client'
+import { prisma } from '@src/data-source'
 import { ApolloCtx } from '@src/interface'
 import { UNKNOWN_ERROR } from '@src/contants'
 import { setError } from '@src/utils/setError'
@@ -12,66 +13,62 @@ import TokenManager from '@src/utils/TokenManager'
 
 @Resolver(User)
 export default class UserResolvers {
-  repository = UserRepository
-
   @FieldResolver(() => String)
   fullname(@Root() user: User): String {
     return `${user.name} ${user.lastname}`
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized([Role.ADMIN])
   @Query(() => t.GetAllUsersResponse)
   async getAllUsers(@Args() args: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> {
-    return this.repository.getAllUsers(args)
+    return UserRepository.getAllUsers(args)
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized([Role.ADMIN])
   @Query(() => User, { nullable: true })
   async getUserById(@Arg('id', () => Int) id: number): Promise<User | null> {
-    return this.repository.findOneBy({ id })
+    return prisma.user.findUnique({ where: { id } })
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized([Role.ADMIN])
   @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
     try {
-      const user = await this.repository.findOneBy({ email: input.email })
+      const user = await prisma.user.findUnique({ where: { email: input.email } })
       if (user) return setError('email', 'El correo ya se encuentra en uso')
 
       const hashPassword = await argon2.hash(input.password)
+      input.password = hashPassword
 
-      const newUser = this.repository.create(input)
-      newUser.password = hashPassword
-
-      return { data: await this.repository.save(newUser) }
+      return { data: await prisma.user.create({ data: input }) }
     } catch (error) {
       console.log({ error })
       return { errors: UNKNOWN_ERROR }
     }
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized([Role.ADMIN])
   @Mutation(() => t.UpdateUsersResponse)
   async updateUser(@Arg('input') input: t.UpdateUsersInput): Promise<t.UpdateUsersResponse> {
     try {
       const { id } = input
-      const user = await this.repository.findOneBy({ id })
+      const user = await prisma.user.findUnique({ where: { id } })
       if (!user) return setError('id', `No existe usuario con el ${id}`)
 
-      await this.repository.save(input)
+      const updatedUser = await prisma.user.update({ where: { id }, data: input })
 
-      return { data: { ...user, ...input } }
+      return { data: updatedUser }
     } catch (error) {
       console.log({ error })
       return { errors: UNKNOWN_ERROR }
     }
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized([Role.ADMIN])
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id') id: number): Promise<boolean> {
     try {
-      await this.repository.delete(id)
+      await prisma.user.delete({ where: { id } })
       return true
     } catch (error) {
       console.log({ error })
@@ -82,7 +79,7 @@ export default class UserResolvers {
   @Mutation(() => t.LoginUserResponse)
   async loginUser(@Arg('input') input: t.LoginUserInput): Promise<t.LoginUserResponse> {
     try {
-      const user = await this.repository.findOneBy({ email: input.email })
+      const user = await prisma.user.findUnique({ where: { email: input.email } })
       if (!user) return setError('email', 'El email o la contraseña son inválidos')
 
       const isValidPass = await argon2.verify(user.password, input.password)
