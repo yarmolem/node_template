@@ -13,13 +13,13 @@ export default class PostResolvers {
   @Authorized([Role.ADMIN])
   @Query(() => t.GetAllPostResponse)
   async getAllPost(@Args() args: t.GetAllPostArgs) {
-    return PostRepository.getAllPost(args)
+    return await PostRepository.getAllPost(args)
   }
 
   @Authorized([Role.ADMIN])
   @Query(() => Post, { nullable: true })
   async getPostById(@Arg('id', () => Int) id: number): Promise<Post | null> {
-    return prisma.post.findUnique({ where: { id } })
+    return await prisma.post.findUnique({ where: { id } })
   }
 
   @Authorized([Role.ADMIN])
@@ -41,7 +41,7 @@ export default class PostResolvers {
   async updatePost(@Arg('input') input: t.UpdatePostInput): Promise<t.UpdatePostResponse> {
     try {
       const post = await prisma.post.findUnique({ where: { id: input.id } })
-      if (!post) return setError('id', `No existe post con el ${input.id}`)
+      if (post === null) return setError('id', `No existe post con el ${input.id}`)
 
       const updatedPost = await prisma.post.update({ where: { id: input.id }, data: input })
 

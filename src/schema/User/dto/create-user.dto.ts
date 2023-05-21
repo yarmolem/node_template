@@ -2,7 +2,7 @@ import { IsEmail } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 import User from '../user.model'
-import { Prisma, Role } from '@prisma/client'
+import { type Prisma, Role } from '@prisma/client'
 import { withErrorsResponse } from '@src/generic-types'
 
 @ObjectType()

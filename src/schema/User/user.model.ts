@@ -1,4 +1,4 @@
-import { Role, User } from '@prisma/client'
+import { Role, type User } from '@prisma/client'
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
 
 registerEnumType(Role, { name: 'Role' })

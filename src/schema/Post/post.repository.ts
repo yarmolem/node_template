@@ -1,4 +1,4 @@
-import * as t from './dto'
+import type * as t from './dto'
 import { prisma } from '@src/data-source'
 
 export const PostRepository = {

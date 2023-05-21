@@ -1,18 +1,18 @@
-import { AuthChecker } from 'type-graphql'
-
 import TokenManager from './TokenManager'
-import { ApolloCtx } from '@src/interface'
 import { prisma } from '@src/data-source'
+
+import { type ApolloCtx } from '@src/interface'
+import { type AuthChecker } from 'type-graphql'
 
 export const authChecker: AuthChecker<ApolloCtx> = async ({ context }, roles) => {
   const token = context.req?.headers?.authorization ?? null
-  if (!token || (token && !token.includes('Bearer '))) return false
+  if (token === null || (token !== null && !token.includes('Bearer '))) return false
 
   const payload = TokenManager.user.verify(token.replace('Bearer ', ''))
-  if (!payload?.id) return false
+  if (typeof payload?.id !== 'number') return false
 
   const user = await prisma.user.findUnique({ where: { id: payload.id } })
-  if (!user) return false
+  if (user === null) return false
 
   context.req.user = user
 

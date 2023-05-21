@@ -2,21 +2,33 @@ import { prisma } from '@src/data-source'
 import logger from '@src/utils/logger'
 
 export default class Database {
-  events() {
+  events(): void {
     process
       .on('SIGTERM', () => {
-        prisma.$disconnect()
-        console.log('\nDisconnected from db')
-        process.exit(1)
+        prisma
+          .$disconnect()
+          .then(() => {
+            console.log('\nDisconnected from db')
+            process.exit(1)
+          })
+          .catch(() => {
+            console.log('\nError disconnecting from db')
+          })
       })
       .on('SIGINT', () => {
-        prisma.$disconnect()
-        console.log('\nDisconnected from db')
-        process.exit(1)
+        prisma
+          .$disconnect()
+          .then(() => {
+            console.log('\nDisconnected from db')
+            process.exit(1)
+          })
+          .catch(() => {
+            console.log('\nError disconnecting from db')
+          })
       })
   }
 
-  async connect() {
+  async connect(): Promise<void> {
     this.events()
 
     try {

@@ -1,13 +1,14 @@
 import { join } from 'path'
-import { Express } from 'express'
 import { buildSchema } from 'type-graphql'
 import { ApolloServer } from 'apollo-server-express'
 
 import logger from '@src/utils/logger'
-import { ApolloCtx } from '@src/interface'
 import { authChecker } from '@src/utils/auth-checker'
 import UserResolvers from '@src/schema/User/user.resolvers'
 import PostResolvers from '@src/schema/Post/post.resolvers'
+
+import { type Express } from 'express'
+import { type ApolloCtx } from '@src/interface'
 
 class Apollo {
   app: Express
@@ -17,7 +18,7 @@ class Apollo {
     this.app = app
   }
 
-  async start() {
+  async start(): Promise<void> {
     try {
       const schema = await buildSchema({
         authChecker,

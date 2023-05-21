@@ -1,5 +1,5 @@
 import { Max, Min } from 'class-validator'
-import { ArgsType, ClassType, Field, Int, ObjectType } from 'type-graphql'
+import { ArgsType, type ClassType, Field, Int, ObjectType } from 'type-graphql'
 
 @ObjectType()
 export default class FieldError {

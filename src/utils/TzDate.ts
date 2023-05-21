@@ -1,24 +1,26 @@
-import { Moment } from 'moment'
 import moment from 'moment-timezone'
+import { type Moment, type MomentInput } from 'moment'
 
 export const enum TimeZones {
   LIMA = 'America/Lima'
 }
 
 export default class TzDate {
+  hasProps = false
   isValid: boolean = false
-  date: Moment | null = null
+  inner_date: Moment | null = null
 
-  constructor(date?: moment.MomentInput) {
+  constructor(date?: MomentInput) {
     try {
-      if (date) {
+      if (typeof date === 'undefined') {
+        this.hasProps = true
         this.isValid = moment(date).isValid()
-        this.date = this.isValid ? moment(date) : null
+        this.inner_date = this.isValid ? moment(date) : null
       }
 
-      if (!date) {
+      if (typeof date !== 'undefined') {
         this.isValid = true
-        this.date = moment()
+        this.inner_date = moment()
       }
     } catch (error) {
       console.log(error)
@@ -26,6 +28,6 @@ export default class TzDate {
   }
 
   get lima() {
-    return this.date?.tz(TimeZones.LIMA)
+    return this.inner_date?.tz(TimeZones.LIMA)
   }
 }

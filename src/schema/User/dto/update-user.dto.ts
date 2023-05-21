@@ -2,8 +2,8 @@ import { IsEmail } from 'class-validator'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
 
 import UserModel from '../user.model'
-import { withErrorsResponse } from '@src/generic-types'
 import { Role } from '@prisma/client'
+import { withErrorsResponse } from '@src/generic-types'
 
 @ObjectType()
 export class UpdateUsersResponse extends withErrorsResponse(UserModel) {}

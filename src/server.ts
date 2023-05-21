@@ -1,5 +1,5 @@
 import cors from 'cors'
-import express, { Express } from 'express'
+import express, { type Express } from 'express'
 
 import Database from './db'
 import Apollo from './apollo'
@@ -33,7 +33,12 @@ class Server {
     await this.apollo.start()
 
     // Start Server
-    await new Promise((res) => this.app.listen(this.port, () => res(true)))
+    await new Promise<boolean>((resolve) => {
+      this.app.listen(this.port, () => {
+        resolve(true)
+      })
+    })
+
     logger.info(`Started server on http://localhost:${this.port}/graphql`)
   }
 }
