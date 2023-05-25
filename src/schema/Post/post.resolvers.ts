@@ -1,14 +1,14 @@
 import { Resolver, Query, Args, Arg, Mutation, Int, Authorized } from 'type-graphql'
 
 import * as t from './dto'
-import Post from './post.model'
+import PostModel from './post.model'
+import { Role } from '@prisma/client'
+import { prisma } from '@src/data-source'
 import { UNKNOWN_ERROR } from '@src/contants'
 import { setError } from '@src/utils/setError'
 import { PostRepository } from './post.repository'
-import { prisma } from '@src/data-source'
-import { Role } from '@prisma/client'
 
-@Resolver(Post)
+@Resolver(PostModel)
 export default class PostResolvers {
   @Authorized([Role.ADMIN])
   @Query(() => t.GetAllPostResponse)
@@ -17,8 +17,8 @@ export default class PostResolvers {
   }
 
   @Authorized([Role.ADMIN])
-  @Query(() => Post, { nullable: true })
-  async getPostById(@Arg('id', () => Int) id: number): Promise<Post | null> {
+  @Query(() => PostModel, { nullable: true })
+  async getPostById(@Arg('id', () => Int) id: number): Promise<PostModel | null> {
     return await prisma.post.findUnique({ where: { id } })
   }
 
@@ -27,7 +27,6 @@ export default class PostResolvers {
   async createPost(@Arg('input') input: t.CreatePostInput): Promise<t.CreatePostResponse> {
     try {
       const post = await prisma.post.create({ data: input })
-      console.log({ post })
 
       return { data: post }
     } catch (error) {
@@ -55,12 +54,9 @@ export default class PostResolvers {
   @Authorized([Role.ADMIN])
   @Mutation(() => Boolean)
   async deletePost(@Arg('id', () => Int) id: number): Promise<boolean> {
-    try {
-      await prisma.post.delete({ where: { id } })
-      return true
-    } catch (error) {
-      console.log({ error })
-      return false
-    }
+    return await prisma.post
+      .delete({ where: { id } })
+      .then(() => true)
+      .catch(() => false)
   }
 }

@@ -58,7 +58,7 @@ type GetAllUsersData {
   createdAt: DateTime!
   email: String!
   fullname: String!
-  id: ID!
+  id: Int!
   lastname: String!
   name: String!
   posts: [PostModel!]!
@@ -159,7 +159,7 @@ type UserModel {
   createdAt: DateTime!
   email: String!
   fullname: String!
-  id: ID!
+  id: Int!
   lastname: String!
   name: String!
   rol: Role!

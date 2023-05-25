@@ -1,11 +1,11 @@
 import { Role, type User } from '@prisma/client'
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql'
+import { Field, Int, ObjectType, registerEnumType } from 'type-graphql'
 
 registerEnumType(Role, { name: 'Role' })
 
 @ObjectType()
 export default class UserModel implements User {
-  @Field(() => ID)
+  @Field(() => Int)
   id: number
 
   @Field()

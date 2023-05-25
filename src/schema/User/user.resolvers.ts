@@ -2,7 +2,7 @@ import argon2 from 'argon2'
 import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolver, Root } from 'type-graphql'
 
 import * as t from './dto'
-import User from './user.model'
+import UserModel from './user.model'
 import { Role } from '.prisma/client'
 import { prisma } from '@src/data-source'
 import { ApolloCtx } from '@src/interface'
@@ -11,22 +11,22 @@ import { setError } from '@src/utils/setError'
 import { UserRepository } from './user.repository'
 import TokenManager from '@src/utils/TokenManager'
 
-@Resolver(User)
+@Resolver(UserModel)
 export default class UserResolvers {
   @FieldResolver(() => String)
-  fullname(@Root() user: User): string {
+  fullname(@Root() user: UserModel): string {
     return `${user.name} ${user.lastname}`
   }
 
-  @Authorized([Role.ADMIN])
+  @Authorized([Role.ADMIN, Role.USER])
   @Query(() => t.GetAllUsersResponse)
   async getAllUsers(@Args() args: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> {
     return await UserRepository.getAllUsers(args)
   }
 
   @Authorized([Role.ADMIN])
-  @Query(() => User, { nullable: true })
-  async getUserById(@Arg('id', () => Int) id: number): Promise<User | null> {
+  @Query(() => UserModel, { nullable: true })
+  async getUserById(@Arg('id', () => Int) id: number): Promise<UserModel | null> {
     return await prisma.user.findUnique({ where: { id } })
   }
 

@@ -1,19 +1,19 @@
 {
   "name": "node-template",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "main": "src/index.ts",
   "author": "Cristian Gonzalez <degonzalez996@gmail.com>",
   "repository": "https://github.com/yarmolem/node_template.git",
   "scripts": {
-    "watch:compile": "swc src -w --out-dir build",
-    "watch:dev": "nodemon --watch \"build/**/*\" -e js ./build/index.js",
+    "watch:ts": "swc src -w --out-dir build",
+    "watch:js": "nodemon --watch \"build/**/*\" -e js ./build/index.js",
+    "dev": "rimraf build && cross-env NODE_ENV=development concurrently \"npm run watch:ts\" \"npm run watch:js\"",
     "build": "swc src -d build",
     "start": "cross-env NODE_ENV=production node build/index.js",
-    "dev": "rimraf build && cross-env NODE_ENV=development concurrently \"npm run watch:compile\" \"npm run watch:dev\"",
-    "gen:jwt-keys": "ts-node generate_jwt_keys.ts",
     "lint": "eslint --ext .ts src",
-    "lint:fix": "eslint --ext .ts src --fix"
+    "lint:fix": "eslint --ext .ts src --fix",
+    "gen:jwt-keys": "ts-node generate_jwt_keys.ts"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",
