@@ -11,12 +11,9 @@ import { type Express } from 'express'
 import { type ApolloCtx } from '@src/interface'
 
 class Apollo {
-  app: Express
   apollo: ApolloServer
 
-  constructor(app: Express) {
-    this.app = app
-  }
+  constructor(private readonly app: Express) {}
 
   async start(): Promise<void> {
     try {

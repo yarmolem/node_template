@@ -29,5 +29,9 @@ const env = process.env as z.infer<typeof server>
 
 export default {
   port: env.PORT,
-  db: { name: env.DB_NAME, user: env.DB_USERNAME, pass: env.DB_PASSWORD }
+  db: {
+    name: env.DB_NAME,
+    user: env.DB_USERNAME,
+    pass: env.DB_PASSWORD
+  }
 }

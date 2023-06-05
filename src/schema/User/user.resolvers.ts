@@ -30,9 +30,12 @@ export default class UserResolvers {
     return await prisma.user.findUnique({ where: { id } })
   }
 
-  @Authorized([Role.ADMIN])
+  // @Authorized([Role.ADMIN])
   @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
+    const parsed = await t.CreateUsersInput.validate(input)
+    if (!parsed.ok) return { errors: parsed.errors }
+
     try {
       const user = await prisma.user.findUnique({ where: { email: input.email } })
       if (user !== null) return setError('email', 'El correo ya se encuentra en uso')

@@ -2,12 +2,12 @@ import { Max, Min } from 'class-validator'
 import { ArgsType, type ClassType, Field, Int, ObjectType } from 'type-graphql'
 
 @ObjectType()
-export default class FieldError {
+export class FieldError {
   @Field()
   field: string
 
-  @Field()
-  message: string
+  @Field(() => [String])
+  message: string[]
 }
 
 @ArgsType()

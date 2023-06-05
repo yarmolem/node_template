@@ -34,7 +34,7 @@ scalar DateTime
 
 type FieldError {
   field: String!
-  message: String!
+  message: [String!]!
 }
 
 type GetAllPostData {
