@@ -1,5 +1,5 @@
-import { Role, type User } from '@prisma/client'
 import { Field, Int, ObjectType, registerEnumType } from 'type-graphql'
+import { Role, type User } from './user.schema'
 
 registerEnumType(Role, { name: 'Role' })
 
@@ -20,7 +20,7 @@ export default class UserModel implements User {
   password: string
 
   @Field(() => Role)
-  rol: Role
+  role: Role
 
   @Field()
   createdAt: Date = new Date()

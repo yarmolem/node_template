@@ -1,16 +1,15 @@
-import { ArgsType, Field, ObjectType } from 'type-graphql'
+import { ArgsType, ObjectType } from 'type-graphql'
 
-import User from '../user.model'
-import Post from '@src/schema/Post/post.model'
+import UserModel from '../user.model'
 import { PaginatedArgs, PaginatedResponse } from '@src/generic-types'
 
 @ArgsType()
 export class GetAllUsersArgs extends PaginatedArgs {}
 
 @ObjectType()
-export class GetAllUsersData extends User {
-  @Field(() => [Post])
-  posts: Post[]
+export class GetAllUsersData extends UserModel {
+  // @Field(() => [PostModel])
+  // posts: PostModel[]
 }
 
 @ObjectType()

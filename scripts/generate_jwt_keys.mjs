@@ -1,7 +1,7 @@
 import * as fs from 'node:fs'
 import * as crypto from 'node:crypto'
 
-const options = { format: 'pem', type: 'pkcs1' } as const
+const options = { format: 'pem', type: 'pkcs1' }
 
 const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 512 })
 

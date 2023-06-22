@@ -19,7 +19,7 @@ input CreateUsersInput {
   lastname: String!
   name: String!
   password: String!
-  rol: Role!
+  role: Role!
 }
 
 type CreateUsersResponse {
@@ -61,8 +61,7 @@ type GetAllUsersData {
   id: Int!
   lastname: String!
   name: String!
-  posts: [PostModel!]!
-  rol: Role!
+  role: Role!
   updatedAt: DateTime!
 }
 
@@ -147,7 +146,7 @@ input UpdateUsersInput {
   id: Int!
   lastname: String!
   name: String!
-  rol: Role!
+  role: Role!
 }
 
 type UpdateUsersResponse {
@@ -162,6 +161,6 @@ type UserModel {
   id: Int!
   lastname: String!
   name: String!
-  rol: Role!
+  role: Role!
   updatedAt: DateTime!
 }

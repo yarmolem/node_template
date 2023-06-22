@@ -26,5 +26,5 @@
     "paths": { "@src/*": ["./src/*"] },
     "lib": ["es2018", "esnext.asynciterable"]
   },
-  "include": ["./src/**/*.ts", "./node_modules/@prisma/client/index.d.ts"]
+  "include": ["./src/**/*.ts"]
 }

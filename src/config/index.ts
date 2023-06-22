@@ -32,6 +32,7 @@ export default {
   db: {
     name: env.DB_NAME,
     user: env.DB_USERNAME,
-    pass: env.DB_PASSWORD
+    pass: env.DB_PASSWORD,
+    url: env.DATABASE_URL
   }
 }

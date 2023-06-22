@@ -1,13 +1,14 @@
-import { type Prisma } from '@prisma/client'
-import { withErrorsResponse } from '@src/generic-types'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
+
 import Post from '../post.model'
+import { withErrorsResponse } from '@src/generic-types'
+import { type NewPost } from '../post.schema'
 
 @ObjectType()
 export class CreatePostResponse extends withErrorsResponse(Post) {}
 
 @InputType()
-export class CreatePostInput implements Omit<Prisma.PostCreateInput, 'author'> {
+export class CreatePostInput implements NewPost {
   @Field()
   title: string
 

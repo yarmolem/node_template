@@ -2,14 +2,14 @@ import { z } from 'zod'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 import UserModel from '../user.model'
-import { type Prisma, Role } from '@prisma/client'
 import { type FieldError, withErrorsResponse } from '@src/generic-types'
+import { type NewUser, Role } from '../user.schema'
 
 @ObjectType()
 export class CreateUsersResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class CreateUsersInput implements Prisma.UserCreateInput {
+export class CreateUsersInput implements NewUser {
   @Field()
   name: string
 
@@ -23,7 +23,7 @@ export class CreateUsersInput implements Prisma.UserCreateInput {
   password: string
 
   @Field(() => Role)
-  rol: Role
+  role: Role
 
   static schema = z.object({
     email: z.string().email('Invalid email'),

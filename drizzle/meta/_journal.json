@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1687412040298,
+      "tag": "0000_chief_tinkerer",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1687414345277,
+      "tag": "0001_parallel_thunderball",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1687415040454,
+      "tag": "0002_warm_colonel_america",
+      "breakpoints": true
+    }
+  ]
+}

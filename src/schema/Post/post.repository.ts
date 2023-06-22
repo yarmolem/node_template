@@ -1,17 +1,30 @@
+import { eq, sql } from 'drizzle-orm'
+
 import type * as t from './dto'
-import { prisma } from '@src/data-source'
+import { db } from '@src/data-source'
+import PostSchema from './post.schema'
+import UserSchema from '../User/user.schema'
 
 export const PostRepository = {
   getAllPost: async ({ page, pageSize, skip, take }: t.GetAllPostArgs): Promise<t.GetAllPostResponse> => {
-    const [count, posts] = await prisma.$transaction([
-      prisma.post.count(),
-      prisma.post.findMany({
-        skip,
-        take,
-        include: { author: true }
-      })
+    const [data, [{ count }]] = await Promise.all([
+      db
+        .select({
+          id: PostSchema.id,
+          title: PostSchema.title,
+          content: PostSchema.content,
+          authorId: PostSchema.authorId,
+          createdAt: PostSchema.createdAt,
+          updatedAt: PostSchema.updatedAt,
+          author: UserSchema
+        })
+        .from(PostSchema)
+        .innerJoin(UserSchema, eq(UserSchema.id, PostSchema.authorId))
+        .limit(take)
+        .offset(skip),
+      db.select({ count: sql<number>`count(*)` }).from(PostSchema)
     ])
 
-    return { data: posts, page, pageSize, totalItems: count }
+    return { data, page, pageSize, totalItems: count }
   }
 }
