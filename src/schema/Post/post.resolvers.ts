@@ -29,7 +29,6 @@ export default class PostResolvers {
   @Mutation(() => t.CreatePostResponse, { nullable: true })
   async createPost(@Arg('input') input: t.CreatePostInput): Promise<t.CreatePostResponse> {
     try {
-      // const post = await prisma.post.create({ data: input })
       const post = await db.insert(PostSchema).values(input).returning()
       return { data: post?.[0] }
     } catch (error) {

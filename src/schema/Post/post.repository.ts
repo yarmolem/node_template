@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm'
+import { eq, getTableColumns, sql } from 'drizzle-orm'
 
 import type * as t from './dto'
 import { db } from '@src/data-source'
@@ -10,13 +10,8 @@ export const PostRepository = {
     const [data, [{ count }]] = await Promise.all([
       db
         .select({
-          id: PostSchema.id,
-          title: PostSchema.title,
-          content: PostSchema.content,
-          authorId: PostSchema.authorId,
-          createdAt: PostSchema.createdAt,
-          updatedAt: PostSchema.updatedAt,
-          author: UserSchema
+          ...getTableColumns(PostSchema),
+          author: getTableColumns(UserSchema)
         })
         .from(PostSchema)
         .innerJoin(UserSchema, eq(UserSchema.id, PostSchema.authorId))
