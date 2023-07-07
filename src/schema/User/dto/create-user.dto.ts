@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
-import UserModel from '../user.model'
+import { UserModel } from '../user.model'
 import { type FieldError, withErrorsResponse } from '@src/generic-types'
 import { type NewUser, Role } from '../user.schema'
 

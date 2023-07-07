@@ -28,4 +28,4 @@ const UserSchema = pgTable(
 export type User = InferModel<typeof UserSchema>
 export type NewUser = InferModel<typeof UserSchema, 'insert'>
 
-export default UserSchema
+export { UserSchema }

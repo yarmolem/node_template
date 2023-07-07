@@ -1,6 +1,6 @@
 import { ArgsType, ObjectType } from 'type-graphql'
 
-import UserModel from '../user.model'
+import { UserModel } from '../user.model'
 import { PaginatedArgs, PaginatedResponse } from '@src/generic-types'
 
 @ArgsType()

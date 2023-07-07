@@ -4,7 +4,7 @@ import { Role, type User } from './user.schema'
 registerEnumType(Role, { name: 'Role' })
 
 @ObjectType()
-export default class UserModel implements User {
+export class UserModel implements User {
   @Field(() => Int)
   id: number
 
