@@ -2,7 +2,7 @@ import { Field, ObjectType, Int } from 'type-graphql'
 import { type Post } from './post.schema'
 
 @ObjectType()
-export default class PostModel implements Post {
+export class PostModel implements Post {
   @Field(() => Int)
   id: number
 

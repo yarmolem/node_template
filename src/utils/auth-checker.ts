@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 
 import { db } from '@src/data-source'
 import TokenManager from './TokenManager'
-import UserSchema from '@src/schema/User/user.schema'
+import { UserSchema } from '@src/schema/User/user.schema'
 
 import { type ApolloCtx } from '@src/interface'
 import { type AuthChecker } from 'type-graphql'

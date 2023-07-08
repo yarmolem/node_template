@@ -2,8 +2,8 @@ import { eq } from 'drizzle-orm'
 import { Resolver, Query, Args, Arg, Mutation, Int, Authorized } from 'type-graphql'
 
 import * as t from './dto'
-import PostModel from './post.model'
-import PostSchema from './post.schema'
+import { PostModel } from './post.model'
+import { PostSchema } from './post.schema'
 
 import { db } from '@src/data-source'
 import { Role } from '../User/user.schema'

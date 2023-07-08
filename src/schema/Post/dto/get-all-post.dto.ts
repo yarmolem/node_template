@@ -1,7 +1,7 @@
 import { ArgsType, Field, ObjectType } from 'type-graphql'
 
-import PostModel from '../post.model'
-import UserModel from '@src/schema/User/user.model'
+import { PostModel } from '../post.model'
+import { UserModel } from '@src/schema/User/user.model'
 import { PaginatedArgs, PaginatedResponse } from '@src/generic-types'
 
 @ArgsType()

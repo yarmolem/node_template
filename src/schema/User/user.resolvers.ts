@@ -31,12 +31,9 @@ export default class UserResolvers {
     return await db.query.users.findFirst({ where: eq(UserSchema.id, id) })
   }
 
-  // @Authorized([Role.ADMIN])
+  @Authorized([Role.ADMIN])
   @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
-    // const parsed = await t.CreateUsersInput.validate(input)
-    // if (!parsed.ok) return { errors: parsed.errors }
-
     try {
       const user = await db.query.users.findFirst({ where: eq(UserSchema.email, input.email) })
       if (user !== undefined) return setError('email', 'El correo ya se encuentra en uso')

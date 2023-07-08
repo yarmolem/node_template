@@ -1,6 +1,7 @@
 import { integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 import { type InferModel } from 'drizzle-orm'
-import UserSchema from '../User/user.schema'
+
+import { UserSchema } from '../User/user.schema'
 
 const PostSchema = pgTable('posts', {
   id: serial('id').primaryKey(),
@@ -16,4 +17,4 @@ const PostSchema = pgTable('posts', {
 export type Post = InferModel<typeof PostSchema>
 export type NewPost = InferModel<typeof PostSchema, 'insert'>
 
-export default PostSchema
+export { PostSchema }

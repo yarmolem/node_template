@@ -2,8 +2,8 @@ import { eq, getTableColumns, sql } from 'drizzle-orm'
 
 import type * as t from './dto'
 import { db } from '@src/data-source'
-import PostSchema from './post.schema'
-import UserSchema from '../User/user.schema'
+import { PostSchema } from './post.schema'
+import { UserSchema } from '../User/user.schema'
 
 export const PostRepository = {
   getAllPost: async ({ page, pageSize, skip, take }: t.GetAllPostArgs): Promise<t.GetAllPostResponse> => {
