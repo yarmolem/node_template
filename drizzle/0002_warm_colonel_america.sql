@@ -1,1 +1,0 @@
-ALTER TABLE "posts" ADD COLUMN "content" text NOT NULL;
