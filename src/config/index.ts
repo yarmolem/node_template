@@ -9,7 +9,7 @@ const server = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production'])
 })
 
-const env: Record<keyof z.infer<typeof server>, string | undefined> = {
+const processEnv: Record<keyof z.infer<typeof server>, string | undefined> = {
   PORT: process.env.PORT,
   DB_NAME: process.env.DB_NAME,
   DB_PASSWORD: process.env.DB_PASSWORD,
@@ -17,16 +17,19 @@ const env: Record<keyof z.infer<typeof server>, string | undefined> = {
   NODE_ENV: process.env.NODE_ENV
 }
 
-const parsed = server.safeParse(env)
+const parsed = server.safeParse(processEnv)
 
 if (!parsed.success) {
   console.error('❌ Invalid environment variables:', parsed.error.flatten().fieldErrors)
   throw new Error('Invalid environment variables')
 }
 
+const env = process.env as z.infer<typeof server>
+
 export default {
+  mode: env.NODE_ENV,
   server: {
-    port: env.PORT
+    port: env.PORT,
   },
   db: {
     name: env.DB_NAME,
