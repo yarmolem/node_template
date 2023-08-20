@@ -41,7 +41,7 @@ class Server {
         })
       })
 
-      logger.info(`Started server on http://localhost:${this.port}/graphql`)
+      logger.info(`Server started on http://localhost:${this.port}/graphql`)
     } catch (e: unknown) {
       const error = e as Error
 

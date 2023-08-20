@@ -2,16 +2,22 @@ import 'reflect-metadata'
 import 'module-alias/register'
 import './config'
 
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
 import Server from './server'
 import logger from './utils/logger'
 
-const main = async () => {
-  const server = new Server()
-  await server.start()
-}
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault('America/Lima')
 
-const now = new Date().toISOString()
+const now = dayjs().format('YYYY-MM-DD hh hh:mm:ss')
 
-main()
+const server = new Server()
+
+server
+  .start()
   .then(() => logger.info(`Server started at ${now}`))
   .catch(() => logger.info(`Error starting server at ${now}`))

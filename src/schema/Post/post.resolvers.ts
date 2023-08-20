@@ -42,7 +42,7 @@ export default class PostResolvers {
   @Mutation(() => t.UpdatePostResponse, { nullable: true })
   async updatePost(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.UpdatePostInput): Promise<t.UpdatePostResponse> {
     const user = req.user
-    if (user === undefined) return setError('token', 'Token invalido')
+    if (user === undefined) return setError('token', 'Invalid token')
 
     try {
       const { id, ...rest } = input
