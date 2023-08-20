@@ -1,16 +1,16 @@
-import { IsEmail } from 'class-validator'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
 
 import { UserRole } from '../user.enums'
-import User from '../user.model'
+import { UserModel } from '../user.model'
 import { withErrorsResponse } from '@src/generic-types'
-import IUser from '../user.interface'
+
+import type { User } from '../user.interface'
 
 @ObjectType()
-export class UpdateUsersResponse extends withErrorsResponse(User) {}
+export class UpdateUsersResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class UpdateUsersInput implements Partial<IUser> {
+export class UpdateUsersInput implements Partial<User> {
   @Field(() => Int)
   id: number
 
@@ -18,7 +18,6 @@ export class UpdateUsersInput implements Partial<IUser> {
   name: string
 
   @Field()
-  @IsEmail()
   email: string
 
   @Field()

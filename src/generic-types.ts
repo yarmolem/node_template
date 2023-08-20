@@ -1,4 +1,3 @@
-import { Max, Min } from 'class-validator'
 import { ArgsType, ClassType, Field, Int, ObjectType } from 'type-graphql'
 
 @ObjectType()
@@ -12,13 +11,10 @@ export default class FieldError {
 
 @ArgsType()
 export class PaginatedArgs {
-  @Min(1)
-  @Field(() => Int)
-  page: number = 0
+  @Field(() => Int, { defaultValue: 1 })
+  page: number = 1
 
-  @Min(1)
-  @Max(50)
-  @Field(() => Int)
+  @Field(() => Int, { defaultValue: 10 })
   pageSize: number = 10
 
   get skip(): number {
@@ -30,8 +26,8 @@ export class PaginatedArgs {
   }
 }
 
-export function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
-  @ObjectType({ isAbstract: true })
+export function PaginatedResponse<TItem extends object>(TItemClass: ClassType<TItem>) {
+  @ObjectType()
   abstract class PaginatedResponseClass {
     @Field(() => [TItemClass])
     data: TItem[]
@@ -48,8 +44,8 @@ export function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
   return PaginatedResponseClass
 }
 
-export function withErrorsResponse<TItem>(TItemClass: ClassType<TItem>) {
-  @ObjectType({ isAbstract: true })
+export function withErrorsResponse<TItem extends object>(TItemClass: ClassType<TItem>) {
+  @ObjectType()
   abstract class withErrorsResponseClass {
     @Field(() => TItemClass, { nullable: true })
     data?: TItem | undefined

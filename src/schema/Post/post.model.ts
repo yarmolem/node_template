@@ -1,12 +1,12 @@
 import { ID, Field, ObjectType, Int } from 'type-graphql'
 import { Column, Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
 
-import User from '../User/user.model'
-import { IPost } from './post.interface'
+import { Post } from './post.interface'
+import { UserModel } from '../User/user.model'
 
-@Entity()
+@Entity({ name: 'posts' })
 @ObjectType()
-export default class Post implements IPost {
+export class PostModel implements Post {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number
@@ -32,6 +32,6 @@ export default class Post implements IPost {
   updatedAt: Date = new Date()
 
   // Relations
-  @ManyToOne(() => User, (post) => post.posts)
-  user?: User
+  @ManyToOne(() => UserModel, (post) => post.posts)
+  user?: UserModel
 }

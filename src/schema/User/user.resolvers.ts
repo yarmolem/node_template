@@ -2,20 +2,22 @@ import argon2 from 'argon2'
 import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolver, Root } from 'type-graphql'
 
 import * as t from './dto'
-import User from './user.model'
 import { UserRole } from './user.enums'
-import { ApolloCtx } from '@src/interface'
+import { UserModel } from './user.model'
 import { UNKNOWN_ERROR } from '@src/contants'
-import { setError } from '@src/utils/setError'
+import { setError } from '@src/utils/set-error'
 import { UserRepository } from './user.repository'
 import TokenManager from '@src/utils/TokenManager'
 
-@Resolver(User)
+import type { User } from './user.interface'
+import type { ApolloCtx } from '@src/interface'
+
+@Resolver(UserModel)
 export default class UserResolvers {
   repository = UserRepository
 
   @FieldResolver(() => String)
-  fullname(@Root() user: User): String {
+  fullname(@Root() user: UserModel): String {
     return `${user.name} ${user.lastname}`
   }
 
@@ -26,12 +28,12 @@ export default class UserResolvers {
   }
 
   @Authorized([UserRole.ADMIN])
-  @Query(() => User, { nullable: true })
+  @Query(() => UserModel, { nullable: true })
   async getUserById(@Arg('id', () => Int) id: number): Promise<User | null> {
     return this.repository.findOneBy({ id })
   }
 
-  @Authorized([UserRole.ADMIN])
+  // @Authorized([UserRole.ADMIN])
   @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
     try {

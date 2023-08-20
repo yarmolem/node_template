@@ -1,6 +1,6 @@
 import { UserRole } from './user.enums'
 
-export default interface IUser {
+export interface User {
   id: number
   email: string
   name: string

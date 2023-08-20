@@ -1,12 +1,12 @@
 import { Resolver, Query, Args, Arg, Mutation, Int } from 'type-graphql'
 
 import * as t from './dto'
-import Post from './post.model'
+import { PostModel } from './post.model'
 import { UNKNOWN_ERROR } from '@src/contants'
-import { setError } from '@src/utils/setError'
+import { setError } from '@src/utils/set-error'
 import { PostRepository } from './post.repository'
 
-@Resolver(Post)
+@Resolver(PostModel)
 export default class PostResolvers {
   repository = PostRepository
 
@@ -15,8 +15,8 @@ export default class PostResolvers {
     return this.repository.getAllPost(args)
   }
 
-  @Query(() => Post, { nullable: true })
-  async getPostById(@Arg('id', () => Int) id: number): Promise<Post | null> {
+  @Query(() => PostModel, { nullable: true })
+  async getPostById(@Arg('id', () => Int) id: number): Promise<PostModel | null> {
     return this.repository.findOneBy({ id })
   }
 

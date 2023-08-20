@@ -1,3 +1,3 @@
-export { CreatePostInput, CreatePostResponse } from './create-post.dto'
-export { UpdatePostInput, UpdatePostResponse } from './update-post.dto'
-export { GetAllPostArgs, GetAllPostResponse } from './get-all-post.dto'
+export * from './create-post.dto'
+export * from './update-post.dto'
+export * from './get-all-post.dto'

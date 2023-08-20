@@ -3,7 +3,7 @@ import * as crypto from 'node:crypto'
 
 const options = { format: 'pem', type: 'pkcs1' } as const
 
-const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 512 })
+const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 })
 
 const puk = publicKey.export(options)
 const prk = privateKey.export(options)

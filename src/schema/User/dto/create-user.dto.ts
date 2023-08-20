@@ -1,15 +1,15 @@
-import { IsEmail } from 'class-validator'
 import { Field, InputType, ObjectType } from 'type-graphql'
 
-import User from '../user.model'
-import IUser from '../user.interface'
 import { UserRole } from '../user.enums'
+import { UserModel } from '../user.model'
 import { withErrorsResponse } from '@src/generic-types'
 
-type CreateUsers = Omit<IUser, 'id' | 'createdAt' | 'updatedAt'>
+import type { User } from '../user.interface'
+
+type CreateUsers = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
 
 @ObjectType()
-export class CreateUsersResponse extends withErrorsResponse(User) {}
+export class CreateUsersResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
 export class CreateUsersInput implements CreateUsers {
@@ -17,7 +17,6 @@ export class CreateUsersInput implements CreateUsers {
   name: string
 
   @Field()
-  @IsEmail()
   email: string
 
   @Field()

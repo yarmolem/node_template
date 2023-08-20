@@ -24,8 +24,8 @@ export default class Database {
 
       logger.info('Connected to the DB.')
     } catch (error) {
+      console.error(error)
       logger.error('Fail connection to the DB.')
-      console.log({ error })
     }
   }
 }

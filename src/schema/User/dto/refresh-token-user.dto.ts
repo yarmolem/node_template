@@ -1,12 +1,12 @@
 import { Field, ObjectType } from 'type-graphql'
 
-import User from '../user.model'
+import { UserModel } from '../user.model'
 import { withErrorsResponse } from '@src/generic-types'
 
 @ObjectType()
 export class RefreshTokenUserData {
-  @Field(() => User)
-  user: User
+  @Field(() => UserModel)
+  user: UserModel
 
   @Field()
   token: string

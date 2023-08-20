@@ -1,6 +1,6 @@
-import 'dotenv/config'
 import 'reflect-metadata'
 import 'module-alias/register'
+import './config'
 
 import Server from './server'
 

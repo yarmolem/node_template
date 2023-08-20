@@ -2,19 +2,20 @@ import { DataSource } from 'typeorm'
 
 import config from './config'
 
-import Post from './schema/Post/post.model'
-import User from './schema/User/user.model'
+import { PostModel } from './schema/Post/post.model'
+import { UserModel } from './schema/User/user.model'
+import path from 'path'
 
 const AppDataSource = new DataSource({
   port: 5432,
   logging: true,
   type: 'postgres',
   host: 'localhost',
-  synchronize: true,
-  username: config.db.user,
-  password: config.db.pass,
   database: config.db.name,
-  entities: [User, Post]
+  username: config.db.username,
+  password: config.db.password,
+  entities: [UserModel, PostModel],
+  migrations: [path.join(__dirname, './migrations/*')]
 })
 
 export default AppDataSource

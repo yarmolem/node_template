@@ -1,7 +1,10 @@
-import { Request, Response } from 'express'
-import User from '@src/schema/User/user.model'
+import type { Request } from 'express'
+import type { Server, IncomingMessage, ServerResponse } from 'node:http'
+
+import type { User } from '@src/schema/User/user.interface'
 
 export interface ApolloCtx {
   req: Request & { user?: User }
-  res: Response
 }
+
+export type HTTPServer = Server<typeof IncomingMessage, typeof ServerResponse>

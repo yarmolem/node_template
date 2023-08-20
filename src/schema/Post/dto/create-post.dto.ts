@@ -1,9 +1,10 @@
-import { withErrorsResponse } from '@src/generic-types'
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
-import Post from '../post.model'
+
+import { PostModel } from '../post.model'
+import { withErrorsResponse } from '@src/generic-types'
 
 @ObjectType()
-export class CreatePostResponse extends withErrorsResponse(Post) {}
+export class CreatePostResponse extends withErrorsResponse(PostModel) {}
 
 @InputType()
 export class CreatePostInput {
