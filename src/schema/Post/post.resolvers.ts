@@ -1,7 +1,8 @@
-import { Resolver, Query, Args, Arg, Mutation, Int } from 'type-graphql'
+import { Resolver, Query, Args, Arg, Mutation, Int, Authorized, Ctx } from 'type-graphql'
 
 import * as t from './dto'
 import { PostModel } from './post.model'
+import { ApolloCtx } from '@src/interface'
 import { UNKNOWN_ERROR } from '@src/contants'
 import { setError } from '@src/utils/set-error'
 import { PostRepository } from './post.repository'
@@ -10,20 +11,26 @@ import { PostRepository } from './post.repository'
 export default class PostResolvers {
   repository = PostRepository
 
+  @Authorized()
   @Query(() => t.GetAllPostResponse)
-  async getAllPost(@Args() args: t.GetAllPostArgs) {
-    return this.repository.getAllPost(args)
+  async getAllPost(@Ctx() { req }: ApolloCtx, @Args() args: t.GetAllPostArgs) {
+    return await this.repository.getAllPost(args, { userId: req.user?.id })
   }
 
+  @Authorized()
   @Query(() => PostModel, { nullable: true })
-  async getPostById(@Arg('id', () => Int) id: number): Promise<PostModel | null> {
-    return this.repository.findOneBy({ id })
+  async getPostById(@Ctx() { req }: ApolloCtx, @Arg('id', () => Int) id: number): Promise<PostModel | null> {
+    const user = req.user
+    if (user === undefined) return null
+
+    return await this.repository.findOneBy({ id, userId: user.id })
   }
 
+  @Authorized()
   @Mutation(() => t.CreatePostResponse, { nullable: true })
-  async createPost(@Arg('input') input: t.CreatePostInput): Promise<t.CreatePostResponse> {
+  async createPost(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.CreatePostInput): Promise<t.CreatePostResponse> {
     try {
-      const data = this.repository.create(input)
+      const data = this.repository.create({ ...input, userId: req.user?.id })
       return { data: await this.repository.save(data) }
     } catch (error) {
       console.log({ error })
@@ -31,12 +38,16 @@ export default class PostResolvers {
     }
   }
 
+  @Authorized()
   @Mutation(() => t.UpdatePostResponse, { nullable: true })
-  async updatePost(@Arg('input') input: t.UpdatePostInput): Promise<t.UpdatePostResponse> {
+  async updatePost(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.UpdatePostInput): Promise<t.UpdatePostResponse> {
+    const user = req.user
+    if (user === undefined) return setError('token', 'Token invalido')
+
     try {
       const { id, ...rest } = input
-      const post = await this.repository.findOneBy({ id })
-      if (!post) return setError('id', `No existe post con el ${id}`)
+      const post = await this.repository.findOneBy({ id, userId: user.id })
+      if (post === null) return setError('id', `No existe post con el ${id}`)
 
       await this.repository.update(id, rest)
 
@@ -47,10 +58,11 @@ export default class PostResolvers {
     }
   }
 
+  @Authorized()
   @Mutation(() => Boolean)
-  async deletePost(@Arg('id', () => Int) id: number): Promise<boolean> {
+  async deletePost(@Ctx() { req }: ApolloCtx, @Arg('id', () => Int) id: number): Promise<boolean> {
     try {
-      await this.repository.delete(id)
+      await this.repository.delete({ id, userId: req.user?.id })
       return true
     } catch (error) {
       console.log({ error })

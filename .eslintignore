@@ -1,2 +1,6 @@
 dist/*
+build/*
+logs/*
+src/migrations/*
 
+generate_jwt_keys.ts

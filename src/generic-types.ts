@@ -1,4 +1,4 @@
-import { ArgsType, ClassType, Field, Int, ObjectType } from 'type-graphql'
+import { ArgsType, Field, Int, ObjectType, type ClassType } from 'type-graphql'
 
 @ObjectType()
 export default class FieldError {

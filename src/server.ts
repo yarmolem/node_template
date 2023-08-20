@@ -35,7 +35,12 @@ class Server {
       this.app.use('/graphql', cors(), json(), apolloMiddleware)
 
       // Start Server
-      await new Promise((res) => this.app.listen(this.port, () => res(true)))
+      await new Promise((resolve) => {
+        this.app.listen(this.port, () => {
+          resolve(true)
+        })
+      })
+
       logger.info(`Started server on http://localhost:${this.port}/graphql`)
     } catch (e: unknown) {
       const error = e as Error

@@ -9,28 +9,28 @@ import { setError } from '@src/utils/set-error'
 import { UserRepository } from './user.repository'
 import TokenManager from '@src/utils/TokenManager'
 
+import { ApolloCtx } from '@src/interface'
 import type { User } from './user.interface'
-import type { ApolloCtx } from '@src/interface'
 
 @Resolver(UserModel)
 export default class UserResolvers {
   repository = UserRepository
 
   @FieldResolver(() => String)
-  fullname(@Root() user: UserModel): String {
+  fullname(@Root() user: UserModel): string {
     return `${user.name} ${user.lastname}`
   }
 
   @Authorized([UserRole.ADMIN])
   @Query(() => t.GetAllUsersResponse)
   async getAllUsers(@Args() args: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> {
-    return this.repository.getAllUsers(args)
+    return await this.repository.getAllUsers(args)
   }
 
   @Authorized([UserRole.ADMIN])
   @Query(() => UserModel, { nullable: true })
   async getUserById(@Arg('id', () => Int) id: number): Promise<User | null> {
-    return this.repository.findOneBy({ id })
+    return await this.repository.findOneBy({ id })
   }
 
   // @Authorized([UserRole.ADMIN])
@@ -38,7 +38,7 @@ export default class UserResolvers {
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
     try {
       const user = await this.repository.findOneBy({ email: input.email })
-      if (user) return setError('email', 'El correo ya se encuentra en uso')
+      if (user !== null) return setError('email', 'El correo ya se encuentra en uso')
 
       const hashPassword = await argon2.hash(input.password)
 
@@ -58,7 +58,7 @@ export default class UserResolvers {
     try {
       const { id } = input
       const user = await this.repository.findOneBy({ id })
-      if (!user) return setError('id', `No existe usuario con el ${id}`)
+      if (user === null) return setError('id', `No existe usuario con el ${id}`)
 
       await this.repository.save(input)
 
@@ -85,7 +85,7 @@ export default class UserResolvers {
   async loginUser(@Arg('input') input: t.LoginUserInput): Promise<t.LoginUserResponse> {
     try {
       const user = await this.repository.findOneBy({ email: input.email })
-      if (!user) return setError('email', 'El email o la contraseña son inválidos')
+      if (user === null) return setError('email', 'El email o la contraseña son inválidos')
 
       const isValidPass = await argon2.verify(user.password, input.password)
       if (!isValidPass) return setError('email', 'El email o la contraseña son inválidos')
@@ -102,7 +102,9 @@ export default class UserResolvers {
   @Authorized()
   @Mutation(() => t.RefreshTokenUserResponse)
   async refreshTokenUser(@Ctx() { req }: ApolloCtx): Promise<t.RefreshTokenUserResponse> {
-    const user = req.user!
+    const user = req.user
+    if (user === undefined) return setError('token', 'Invalid token')
+
     const token = TokenManager.user.sign({ id: user.id })
 
     return { data: { user, token } }

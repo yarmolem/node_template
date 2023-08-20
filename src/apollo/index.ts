@@ -16,7 +16,7 @@ import AppError from '@src/utils/app-error'
 class Apollo {
   apollo: ApolloServer
 
-  constructor(private httpServer: HTTPServer) {}
+  constructor(private readonly httpServer: HTTPServer) {}
 
   async start() {
     const schema = await buildSchema({
@@ -24,14 +24,14 @@ class Apollo {
       resolvers: [HelloResolvers, UserResolvers, PostResolvers]
     })
 
-    if (!schema) throw new AppError('Error generating apollo schema')
+    if (schema === undefined) throw new AppError('Error generating apollo schema')
 
     const server = new ApolloServer<ApolloCtx>({
       schema,
       plugins: [ApolloServerPluginDrainHttpServer({ httpServer: this.httpServer })]
     })
 
-    if (!server) throw new AppError('Error generating apollo server')
+    if (server === undefined) throw new AppError('Error generating apollo server')
 
     await server.start()
 

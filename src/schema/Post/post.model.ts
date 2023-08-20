@@ -1,13 +1,14 @@
-import { ID, Field, ObjectType, Int } from 'type-graphql'
+import { Field, ObjectType, Int } from 'type-graphql'
 import { Column, Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
 
-import { Post } from './post.interface'
 import { UserModel } from '../User/user.model'
 
-@Entity({ name: 'posts' })
+import type { Post } from './post.interface'
+
 @ObjectType()
+@Entity({ name: 'posts' })
 export class PostModel implements Post {
-  @Field(() => ID)
+  @Field(() => Int)
   @PrimaryGeneratedColumn()
   id: number
 

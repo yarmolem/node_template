@@ -1,10 +1,9 @@
+import path from 'path'
 import { DataSource } from 'typeorm'
 
 import config from './config'
-
 import { PostModel } from './schema/Post/post.model'
 import { UserModel } from './schema/User/user.model'
-import path from 'path'
 
 const AppDataSource = new DataSource({
   port: 5432,

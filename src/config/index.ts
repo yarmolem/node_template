@@ -29,7 +29,7 @@ const env = process.env as z.infer<typeof server>
 export default {
   mode: env.NODE_ENV,
   server: {
-    port: env.PORT,
+    port: env.PORT
   },
   db: {
     name: env.DB_NAME,

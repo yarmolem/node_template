@@ -1,4 +1,4 @@
-import { Field, InputType, Int, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType } from 'type-graphql'
 
 import { PostModel } from '../post.model'
 import { withErrorsResponse } from '@src/generic-types'
@@ -13,7 +13,4 @@ export class CreatePostInput {
 
   @Field()
   content: string
-
-  @Field(() => Int)
-  userId: number
 }

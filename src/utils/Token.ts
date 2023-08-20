@@ -2,7 +2,11 @@ import * as fs from 'node:fs'
 import * as jwt from 'jsonwebtoken'
 
 type TokenEntity = 'AUTH.USER'
-type Payload<T extends Object> = T & { iat: number; exp: number; entity: TokenEntity }
+type Payload<T extends object> = T & {
+  iat: number
+  exp: number
+  entity: TokenEntity
+}
 
 interface TokenProps {
   expiresIn: string
@@ -18,7 +22,7 @@ const privateKEY = fs.readFileSync('./jwt_private.pem', 'utf8')
 // const subject = 'some@user.com'
 // const audience = 'http://mysoftcorp.in'
 
-export default class Token<T extends Object> {
+export default class Token<T extends object> {
   expiresIn: string
   entity: TokenEntity
 

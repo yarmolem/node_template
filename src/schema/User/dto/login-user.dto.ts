@@ -1,8 +1,9 @@
 import { Field, InputType, ObjectType } from 'type-graphql'
 
 import { UserModel } from '../user.model'
-import { User } from '../user.interface'
 import { withErrorsResponse } from '@src/generic-types'
+
+import type { User } from '../user.interface'
 
 @ObjectType()
 export class LoginUserData {

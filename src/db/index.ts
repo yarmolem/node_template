@@ -6,13 +6,27 @@ export default class Database {
     process
       .on('SIGTERM', () => {
         AppDataSource.destroy()
-        console.log('\nDisconnected from db')
-        process.exit(1)
+          .then(() => {
+            console.log('\nDisconnected from db')
+          })
+          .catch(() => {
+            console.log('\nError disconnecting from db')
+          })
+          .finally(() => {
+            process.exit(1)
+          })
       })
       .on('SIGINT', () => {
         AppDataSource.destroy()
-        console.log('\nDisconnected from db')
-        process.exit(1)
+          .then(() => {
+            console.log('\nDisconnected from db')
+          })
+          .catch(() => {
+            console.log('\nError disconnecting from db')
+          })
+          .finally(() => {
+            process.exit(1)
+          })
       })
   }
 
