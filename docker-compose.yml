@@ -1,8 +1,21 @@
 version: '3.7'
 
 services:
-  db:
+  api:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    volumes:
+      - ./src:/node-app/src
+    environment:
+      DATABASE_URL: postgresql://${DB_NAME}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+
+  postgres:
     image: postgres
+    restart: always
     ports:
       - 5432:5432
     environment:

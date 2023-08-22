@@ -8,7 +8,7 @@
   "scripts": {
     "watch:ts": "swc src -w --out-dir build",
     "watch:js": "nodemon --watch \"build/**/*\" -e js ./build/index.js",
-    "dev": "rimraf build && cross-env NODE_ENV=development concurrently \"npm run watch:ts\" \"npm run watch:js\"",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run watch:ts\" \"npm run watch:js\"",
     "build": "swc src -d build",
     "start": "cross-env NODE_ENV=production node build/index.js",
     "lint": "eslint --ext .ts src",
