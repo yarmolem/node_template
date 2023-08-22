@@ -6,7 +6,8 @@ import { isDev } from './constants'
 import { PostModel } from './schema/Post/post.model'
 import { UserModel } from './schema/User/user.model'
 
-const URL = config.db.url ?? `postgresql://${config.db.username}:${config.db.password}@postgres:5432/${config.db.name}`
+const { host, port, name, password, username } = config.db
+const URL = `postgresql://${username}:${password}@${host}:${port}/${name}`
 
 const AppDataSource = new DataSource({
   url: URL,

@@ -1,5 +1,6 @@
 import cors from 'cors'
 import { json } from 'body-parser'
+import session from 'express-session'
 import { createServer } from 'node:http'
 import express, { type Express } from 'express'
 
@@ -10,6 +11,7 @@ import logger from './utils/logger'
 import AppError from './utils/app-error'
 
 import type { HTTPServer } from './interface'
+import { COOKIE_NAME } from './constants'
 
 class Server {
   app: Express
@@ -32,7 +34,30 @@ class Server {
 
       // Start Apollo
       const apolloMiddleware = await this.apollo.start()
-      this.app.use('/graphql', cors(), json(), apolloMiddleware)
+
+      this.app.use(
+        cors({
+          credentials: true,
+          origin: ['https://sandbox.embed.apollographql.com']
+        })
+      )
+
+      this.app.use(
+        session({
+          resave: false,
+          name: COOKIE_NAME,
+          secret: 'keyboard catty',
+          saveUninitialized: false,
+          cookie: {
+            secure: false, // https only
+            httpOnly: true,
+            sameSite: 'lax', // csrf
+            maxAge: 1000 * 60 * 60 * 24 // 24h
+          }
+        })
+      )
+
+      this.app.use('/graphql', json(), apolloMiddleware)
 
       // Start Server
       await new Promise((resolve) => {

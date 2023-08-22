@@ -35,7 +35,7 @@ class Apollo {
     await server.start()
 
     logger.info('Apollo server started')
-    return expressMiddleware(server, { context: async (ctx) => ({ req: ctx.req }) })
+    return expressMiddleware(server, { context: async (ctx) => ctx })
   }
 }
 

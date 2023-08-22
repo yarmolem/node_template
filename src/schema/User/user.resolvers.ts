@@ -4,10 +4,9 @@ import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolv
 import * as t from './types'
 import { UserRole } from './user.enums'
 import { UserModel } from './user.model'
-import { UNKNOWN_ERROR } from '@src/constants'
+import { COOKIE_NAME, UNKNOWN_ERROR } from '@src/constants'
 import { setError } from '@src/utils/set-error'
 import { UserRepository } from './user.repository'
-import TokenManager from '@src/utils/TokenManager'
 
 import { ApolloCtx } from '@src/interface'
 import type { User } from './user.interface'
@@ -81,8 +80,14 @@ export default class UserResolvers {
     }
   }
 
+  @Query(() => UserModel, { nullable: true })
+  async me(@Ctx() { req }: ApolloCtx): Promise<User | null> {
+    if (req.session?.userId === undefined) return null
+    return await this.repository.findOneBy({ id: req.session.userId })
+  }
+
   @Mutation(() => t.LoginUserResponse)
-  async loginUser(@Arg('input') input: t.LoginUserInput): Promise<t.LoginUserResponse> {
+  async login(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.LoginUserInput): Promise<t.LoginUserResponse> {
     try {
       const user = await this.repository.findOneBy({ email: input.email })
       if (user === null) return setError('email', 'El email o la contraseña son inválidos')
@@ -90,8 +95,9 @@ export default class UserResolvers {
       const isValidPass = await argon2.verify(user.password, input.password)
       if (!isValidPass) return setError('email', 'El email o la contraseña son inválidos')
 
-      const token = TokenManager.user.sign({ id: user.id })
+      const token = ''
 
+      req.session.userId = user.id
       return { data: { user, token } }
     } catch (error) {
       console.log({ error })
@@ -99,14 +105,18 @@ export default class UserResolvers {
     }
   }
 
-  @Authorized()
-  @Mutation(() => t.RefreshTokenUserResponse)
-  async refreshTokenUser(@Ctx() { req }: ApolloCtx): Promise<t.RefreshTokenUserResponse> {
-    const user = req.user
-    if (user === undefined) return setError('token', 'Invalid token')
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { req, res }: ApolloCtx): Promise<boolean> {
+    return await new Promise((resolve) => {
+      req.session.destroy((err) => {
+        if (typeof err !== 'undefined') {
+          resolve(false)
+          return
+        }
 
-    const token = TokenManager.user.sign({ id: user.id })
-
-    return { data: { user, token } }
+        res.clearCookie(COOKIE_NAME)
+        resolve(true)
+      })
+    })
   }
 }
