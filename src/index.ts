@@ -13,7 +13,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('America/Lima')
 
-const now = dayjs().format('YYYY-MM-DD hh hh:mm:ss')
+const now = dayjs().format('YYYY-MM-DD hh:mm:ss')
 
 const server = new Server()
 

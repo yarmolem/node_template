@@ -8,7 +8,6 @@ import { authChecker } from '@src/utils/auth-checker'
 
 import UserResolvers from '@src/schema/User/user.resolvers'
 import PostResolvers from '@src/schema/Post/post.resolvers'
-import HelloResolvers from '@src/schema/Hello/hello.resolvers'
 
 import type { ApolloCtx, HTTPServer } from '@src/interface'
 import AppError from '@src/utils/app-error'
@@ -21,7 +20,7 @@ class Apollo {
   async start() {
     const schema = await buildSchema({
       authChecker,
-      resolvers: [HelloResolvers, UserResolvers, PostResolvers]
+      resolvers: [UserResolvers, PostResolvers]
     })
 
     if (schema === undefined) throw new AppError('Error generating apollo schema')

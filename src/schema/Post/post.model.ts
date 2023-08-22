@@ -1,5 +1,5 @@
 import { Field, ObjectType, Int } from 'type-graphql'
-import { Column, Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, ManyToOne, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, Index } from 'typeorm'
 
 import { UserModel } from '../User/user.model'
 
@@ -13,6 +13,7 @@ export class PostModel implements Post {
   id: number
 
   @Field()
+  @Index()
   @Column()
   title: string
 

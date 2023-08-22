@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from 'type-graphql'
-import { Column, Entity, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, Index } from 'typeorm'
 
 import { UserRole } from './user.enums'
 import { PostModel } from '../Post/post.model'
@@ -14,6 +14,7 @@ export class UserModel implements User {
   id: number
 
   @Field()
+  @Index()
   @Column({ unique: true })
   email: string
 

@@ -1,7 +1,7 @@
 import { Field, ID, InputType, ObjectType } from 'type-graphql'
 
 import { PostModel } from '../post.model'
-import { CreatePostInput } from './create-post.dto'
+import { CreatePostInput } from './create-post.type'
 import { withErrorsResponse } from '@src/generic-types'
 
 @ObjectType()

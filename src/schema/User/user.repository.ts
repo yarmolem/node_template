@@ -1,4 +1,4 @@
-import type * as t from './dto'
+import type * as t from './types'
 import AppDataSource from '@src/data-source'
 import { UserModel } from './user.model'
 import { PostModel } from '../Post/post.model'

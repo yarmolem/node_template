@@ -1,10 +1,10 @@
 import argon2 from 'argon2'
 import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolver, Root } from 'type-graphql'
 
-import * as t from './dto'
+import * as t from './types'
 import { UserRole } from './user.enums'
 import { UserModel } from './user.model'
-import { UNKNOWN_ERROR } from '@src/contants'
+import { UNKNOWN_ERROR } from '@src/constants'
 import { setError } from '@src/utils/set-error'
 import { UserRepository } from './user.repository'
 import TokenManager from '@src/utils/TokenManager'
@@ -33,7 +33,7 @@ export default class UserResolvers {
     return await this.repository.findOneBy({ id })
   }
 
-  // @Authorized([UserRole.ADMIN])
+  @Authorized([UserRole.ADMIN])
   @Mutation(() => t.CreateUsersResponse)
   async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
     try {
