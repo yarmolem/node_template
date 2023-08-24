@@ -6,11 +6,13 @@ import { withErrorsResponse } from '@src/generic-types'
 
 import type { User } from '../user.interface'
 
+type UpdateUser = Omit<User, 'password' | 'createdAt' | 'updatedAt'>
+
 @ObjectType()
 export class UpdateUserResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class UpdateUserInput implements Partial<User> {
+export class UpdateUserInput implements UpdateUser {
   @Field(() => Int)
   id: number
 

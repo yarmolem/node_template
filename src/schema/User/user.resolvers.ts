@@ -44,7 +44,7 @@ export default class UserResolvers {
     return await this.repository.updateUser(input)
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized(UserRole.ADMIN)
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id') id: number): Promise<boolean> {
     return await this.repository
