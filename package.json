@@ -14,7 +14,10 @@
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
     "typeorm": "typeorm-ts-node-esm",
-    "gen:jwt-keys": "ts-node ./scripts/generate_jwt_keys.ts"
+    "db:create": "yarn typeorm migration:create",
+    "db:push": "yarn typeorm migration:run -d src/data-source.ts",
+    "db:show": "yarn typeorm migration:show -d src/data-source.ts",
+    "db:generate": "yarn typeorm migration:generate -d src/data-source.ts"
   },
   "_moduleAliases": {
     "@src": "./build"

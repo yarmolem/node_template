@@ -1,15 +1,15 @@
 version: '3.7'
 
 services:
-  api:
-    build: .
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - postgres
-    volumes:
-      - ./src:/node-app/src
+  #api:
+  #  build: .
+  #  restart: always
+  #  ports:
+  #    - 8080:8080
+  #  depends_on:
+  #    - postgres
+  #  volumes:
+  #    - ./src:/node-app/src
 
   postgres:
     image: postgres
