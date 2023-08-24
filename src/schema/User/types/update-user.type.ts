@@ -7,10 +7,10 @@ import { withErrorsResponse } from '@src/generic-types'
 import type { User } from '../user.interface'
 
 @ObjectType()
-export class UpdateUsersResponse extends withErrorsResponse(UserModel) {}
+export class UpdateUserResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class UpdateUsersInput implements Partial<User> {
+export class UpdateUserInput implements Partial<User> {
   @Field(() => Int)
   id: number
 

@@ -4,9 +4,9 @@ import { Query, Arg, Mutation, Int, Args, Resolver, Authorized, Ctx, FieldResolv
 import * as t from './types'
 import { UserRole } from './user.enums'
 import { UserModel } from './user.model'
-import { COOKIE_NAME, UNKNOWN_ERROR } from '@src/constants'
 import { setError } from '@src/utils/set-error'
 import { UserRepository } from './user.repository'
+import { COOKIE_MAX_AGE, COOKIE_NAME, UNKNOWN_ERROR } from '@src/constants'
 
 import { ApolloCtx } from '@src/interface'
 import type { User } from './user.interface'
@@ -20,74 +20,52 @@ export default class UserResolvers {
     return `${user.name} ${user.lastname}`
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized(UserRole.ADMIN)
   @Query(() => t.GetAllUsersResponse)
   async getAllUsers(@Args() args: t.GetAllUsersArgs): Promise<t.GetAllUsersResponse> {
     return await this.repository.getAllUsers(args)
   }
 
-  @Authorized([UserRole.ADMIN])
+  @Authorized(UserRole.ADMIN)
   @Query(() => UserModel, { nullable: true })
   async getUserById(@Arg('id', () => Int) id: number): Promise<User | null> {
     return await this.repository.findOneBy({ id })
   }
 
-  @Authorized([UserRole.ADMIN])
-  @Mutation(() => t.CreateUsersResponse)
-  async createUser(@Arg('input') input: t.CreateUsersInput): Promise<t.CreateUsersResponse> {
-    try {
-      const user = await this.repository.findOneBy({ email: input.email })
-      if (user !== null) return setError('email', 'El correo ya se encuentra en uso')
-
-      const hashPassword = await argon2.hash(input.password)
-
-      const newUser = this.repository.create(input)
-      newUser.password = hashPassword
-
-      return { data: await this.repository.save(newUser) }
-    } catch (error) {
-      console.log({ error })
-      return { errors: UNKNOWN_ERROR }
-    }
+  @Authorized(UserRole.ADMIN)
+  @Mutation(() => t.CreateUserResponse)
+  async createUser(@Arg('input') input: t.CreateUserInput): Promise<t.CreateUserResponse> {
+    return await this.repository.createUser(input)
   }
 
-  @Authorized([UserRole.ADMIN])
-  @Mutation(() => t.UpdateUsersResponse)
-  async updateUser(@Arg('input') input: t.UpdateUsersInput): Promise<t.UpdateUsersResponse> {
-    try {
-      const { id } = input
-      const user = await this.repository.findOneBy({ id })
-      if (user === null) return setError('id', `No existe usuario con el ${id}`)
-
-      await this.repository.save(input)
-
-      return { data: { ...user, ...input } }
-    } catch (error) {
-      console.log({ error })
-      return { errors: UNKNOWN_ERROR }
-    }
+  @Authorized(UserRole.ADMIN)
+  @Mutation(() => t.UpdateUserResponse)
+  async updateUser(@Arg('input') input: t.UpdateUserInput): Promise<t.UpdateUserResponse> {
+    return await this.repository.updateUser(input)
   }
 
   @Authorized([UserRole.ADMIN])
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id') id: number): Promise<boolean> {
-    try {
-      await this.repository.delete(id)
-      return true
-    } catch (error) {
-      console.log({ error })
-      return false
-    }
+    return await this.repository
+      .delete(id)
+      .then(() => true)
+      .catch(() => false)
   }
 
   @Query(() => UserModel, { nullable: true })
   async me(@Ctx() { req }: ApolloCtx): Promise<User | null> {
     if (req.session?.userId === undefined) return null
+
+    const day = COOKIE_MAX_AGE
+    req.session.cookie.expires = new Date(Date.now() + day)
+    req.session.cookie.maxAge = day
+
     return await this.repository.findOneBy({ id: req.session.userId })
   }
 
-  @Mutation(() => t.LoginUserResponse)
-  async login(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.LoginUserInput): Promise<t.LoginUserResponse> {
+  @Mutation(() => t.LoginResponse)
+  async login(@Ctx() { req }: ApolloCtx, @Arg('input') input: t.LoginInput): Promise<t.LoginResponse> {
     try {
       const user = await this.repository.findOneBy({ email: input.email })
       if (user === null) return setError('email', 'El email o la contraseña son inválidos')
@@ -95,10 +73,8 @@ export default class UserResolvers {
       const isValidPass = await argon2.verify(user.password, input.password)
       if (!isValidPass) return setError('email', 'El email o la contraseña son inválidos')
 
-      const token = ''
-
       req.session.userId = user.id
-      return { data: { user, token } }
+      return { data: user }
     } catch (error) {
       console.log({ error })
       return { errors: UNKNOWN_ERROR }

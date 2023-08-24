@@ -11,7 +11,7 @@ import logger from './utils/logger'
 import AppError from './utils/app-error'
 
 import type { HTTPServer } from './interface'
-import { COOKIE_NAME, isDev } from './constants'
+import { COOKIE_MAX_AGE, COOKIE_NAME, isDev } from './constants'
 
 class Server {
   app: Express
@@ -36,6 +36,7 @@ class Server {
       // Start Apollo
       const apolloMiddleware = await this.apollo.start()
 
+      this.app.set('trust proxy', 1)
       this.app.use(
         cors({
           credentials: true,
@@ -50,10 +51,10 @@ class Server {
           secret: config.session.secret,
           saveUninitialized: false,
           cookie: {
-            secure: false, // https only
+            secure: false,
             httpOnly: true,
-            sameSite: 'lax', // csrf
-            maxAge: 1000 * 60 * 60 * 24 // 24h
+            sameSite: 'lax',
+            maxAge: COOKIE_MAX_AGE
           }
         })
       )

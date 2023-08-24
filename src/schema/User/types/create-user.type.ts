@@ -6,13 +6,13 @@ import { withErrorsResponse } from '@src/generic-types'
 
 import type { User } from '../user.interface'
 
-type CreateUsers = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
+type CreateUser = Omit<User, 'id' | 'createdAt' | 'updatedAt'>
 
 @ObjectType()
-export class CreateUsersResponse extends withErrorsResponse(UserModel) {}
+export class CreateUserResponse extends withErrorsResponse(UserModel) {}
 
 @InputType()
-export class CreateUsersInput implements CreateUsers {
+export class CreateUserInput implements CreateUser {
   @Field()
   name: string
 

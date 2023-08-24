@@ -1,4 +1,5 @@
 import type { UserRole } from './user.enums'
+import type { Post } from '../Post/post.interface'
 
 export interface User {
   id: number
@@ -7,6 +8,7 @@ export interface User {
   lastname: string
   password: string
   rol: UserRole
+  posts?: Post[]
   createdAt: Date
   updatedAt: Date
 }
