@@ -8,6 +8,7 @@ const server = z.object({
   DB_NAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_USERNAME: z.string(),
+  SESSION_SECRET_KEY: z.string(),
   NODE_ENV: z.enum(['development', 'test', 'production'])
 })
 
@@ -18,6 +19,7 @@ const processEnv: Record<keyof z.infer<typeof server>, string | undefined> = {
   DB_HOST: process.env.DB_HOST,
   DB_PASSWORD: process.env.DB_PASSWORD,
   DB_USERNAME: process.env.DB_USERNAME,
+  SESSION_SECRET_KEY: process.env.SESSION_SECRET_KEY,
   NODE_ENV: process.env.NODE_ENV
 }
 
@@ -32,6 +34,9 @@ const env = process.env as z.infer<typeof server>
 
 export default {
   mode: env.NODE_ENV,
+  session: {
+    secret: env.SESSION_SECRET_KEY
+  },
   server: {
     port: env.PORT
   },

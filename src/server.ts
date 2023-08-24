@@ -11,13 +11,14 @@ import logger from './utils/logger'
 import AppError from './utils/app-error'
 
 import type { HTTPServer } from './interface'
-import { COOKIE_NAME } from './constants'
+import { COOKIE_NAME, isDev } from './constants'
 
 class Server {
   app: Express
   db: Database
   apollo: Apollo
   httpServer: HTTPServer
+  graphqlPath = '/graphql'
   port = config.server.port
 
   constructor() {
@@ -38,7 +39,7 @@ class Server {
       this.app.use(
         cors({
           credentials: true,
-          origin: ['https://sandbox.embed.apollographql.com']
+          origin: isDev ? ['https://sandbox.embed.apollographql.com'] : []
         })
       )
 
@@ -46,7 +47,7 @@ class Server {
         session({
           resave: false,
           name: COOKIE_NAME,
-          secret: 'keyboard catty',
+          secret: config.session.secret,
           saveUninitialized: false,
           cookie: {
             secure: false, // https only
@@ -57,7 +58,7 @@ class Server {
         })
       )
 
-      this.app.use('/graphql', json(), apolloMiddleware)
+      this.app.use(this.graphqlPath, json(), apolloMiddleware)
 
       // Start Server
       await new Promise((resolve) => {
@@ -66,7 +67,7 @@ class Server {
         })
       })
 
-      logger.info(`Server started on http://localhost:${this.port}/graphql`)
+      logger.info(`Server started on http://localhost:${this.port}${this.graphqlPath}`)
     } catch (e: unknown) {
       const error = e as Error
 
