@@ -74,6 +74,7 @@ export default class UserResolvers {
       if (!isValidPass) return setError('email', 'El email o la contraseña son inválidos')
 
       req.session.userId = user.id
+
       return { data: user }
     } catch (error) {
       console.log({ error })

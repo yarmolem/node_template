@@ -75,6 +75,8 @@ class Server {
       if (error instanceof AppError) {
         logger.error(`[SERVER]: ${error.message}`)
       }
+
+      process.exit(1)
     }
   }
 }

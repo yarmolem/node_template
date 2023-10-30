@@ -40,6 +40,8 @@ export default class Database {
     } catch (error) {
       console.error(error)
       logger.error('Fail connection to the DB.')
+
+      process.exit(1)
     }
   }
 }
