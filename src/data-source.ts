@@ -1,16 +1,22 @@
-import postgres from 'postgres'
-import { drizzle } from 'drizzle-orm/postgres-js'
+import { Pool } from 'pg'
+import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres'
 
 import config from './config'
-import { UserSchema } from './schema/User/user.schema'
-import { PostSchema } from './schema/Post/post.schema'
+import logger from '@src/utils/logger'
+import { users } from '@src/schema/User/user.schema'
 
-const client = postgres(config.db.url)
+const schema = {
+  users
+}
 
-export const db = drizzle(client, {
-  logger: true,
-  schema: {
-    users: UserSchema,
-    posts: PostSchema
-  }
-})
+export type DrizzleORM = NodePgDatabase<typeof schema>
+
+const pool = new Pool(config.db)
+const orm = drizzle(pool, { schema })
+
+async function connect(): Promise<void> {
+  await pool.connect()
+  logger.info('Connected to the DB.')
+}
+
+export { orm, pool, connect }

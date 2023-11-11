@@ -1,45 +1,46 @@
 import cors from 'cors'
 import express, { type Express } from 'express'
 
-import Database from './db'
-import Apollo from './apollo'
 import config from './config'
+import RootRouter from './router'
 import logger from './utils/logger'
+import { connect } from './data-source'
 
 class Server {
   app: Express
-  db: Database
-  apollo: Apollo
   port = config.port
 
   constructor() {
     this.app = express()
-    this.db = new Database()
-    this.apollo = new Apollo(this.app)
   }
 
   middlewares() {
     this.app.use(cors())
+    this.app.use(express.json())
+    this.app.use(express.urlencoded({ extended: true }))
+  }
+
+  routes() {
+    this.app.use('/api', RootRouter)
   }
 
   async start() {
+    // DB connection
+    await connect()
+
     // Start middlewares
     this.middlewares()
 
-    // DB connection
-    await this.db.connect()
-
-    // Start Apollo
-    await this.apollo.start()
+    // Start routes
+    this.routes()
 
     // Start Server
     await new Promise<boolean>((resolve) => {
       this.app.listen(this.port, () => {
+        logger.info(`Started server on http://localhost:${this.port}`)
         resolve(true)
       })
     })
-
-    logger.info(`Started server on http://localhost:${this.port}/graphql`)
   }
 }
 

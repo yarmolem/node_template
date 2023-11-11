@@ -1,16 +1,29 @@
 import 'dotenv/config'
-import 'reflect-metadata'
 import 'module-alias/register'
 
-import Server from './server'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
 import logger from './utils/logger'
-import TzDate from './utils/TzDate'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault('America/Lima')
+
+const now = dayjs().format('YYYY-MM-DD hh:mm:ss')
 
 const main = async () => {
+  const { default: Server } = await import('./server')
   const server = new Server()
   await server.start()
 }
 
 main()
-  .then(() => logger.info(`Server started at ${new TzDate().lima?.format('DD-MM-YYYY hh:mm:ss') ?? ''}`))
-  .catch(() => logger.info(`Error starting server at ${new TzDate().lima?.format('DD-MM-YYYY hh:mm:ss') ?? ''}`))
+  .then(() => {
+    logger.info(`Server started at ${now}`)
+  })
+  .catch((error) => {
+    console.error(error)
+    logger.info(`Error starting server at ${now}`)
+  })

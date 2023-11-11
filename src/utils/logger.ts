@@ -1,8 +1,8 @@
+import dayjs from 'dayjs'
 import winston from 'winston'
-import TzDate from './TzDate'
 
 function timezoned(): string {
-  return new TzDate().lima?.format('YYYY-MM-DD HH:mm:ss') ?? ''
+  return dayjs().format('YYYY-MM-DD HH:mm:ss')
 }
 
 const logger: winston.Logger = winston.createLogger({
